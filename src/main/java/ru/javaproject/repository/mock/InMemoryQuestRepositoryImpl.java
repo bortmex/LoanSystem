@@ -1,54 +1,84 @@
 package ru.javaproject.repository.mock;
 
+import org.springframework.stereotype.Repository;
 import ru.javaproject.model.Questionnaire;
 import ru.javaproject.repository.QuestRepository;
+import ru.javaproject.util.QuestsUtil;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
+@Repository
 public class InMemoryQuestRepositoryImpl implements QuestRepository {
 
-    private ConcurrentHashMap<Integer, Questionnaire> listQuestionnaires =  new ConcurrentHashMap<>();
+    private Map<Integer, Questionnaire> repository =  new ConcurrentHashMap<>();
 
-    public static AtomicInteger index = new AtomicInteger(0);
+    public static AtomicInteger counter = new AtomicInteger(0);
 
-    public InMemoryQuestRepositoryImpl() {
-        add(new Questionnaire(true,24,35000, "Volga", 45000, 60 , 1));
-        add(new Questionnaire(false,56,56000,"UFO", 45,30, 1));
-        add(new Questionnaire(true,27,78000,  "raketa", 450000, 55, 1));
+    {
+        QuestsUtil.QUESTIONNAIRES.forEach(this::save);
     }
 
     @Override
-    public void add(Questionnaire questionnaire) {
-        index.getAndIncrement();
-        questionnaire.setId(index.get());
-        listQuestionnaires.put(index.get(),questionnaire);
+    public Questionnaire save(Questionnaire questionnaire, int partnerId) {
+        try {
+            if (repository.get(questionnaire.getId()).getPartnerId()!= partnerId) return null;
+        } catch (Exception ignored) {
+        }
+
+        if (questionnaire.isNew()) {
+            questionnaire.setId(counter.incrementAndGet());
+        }
+        questionnaire.setPartnerId(partnerId);
+        repository.put(questionnaire.getId(), questionnaire);
+        return questionnaire;
+    }
+
+    public Questionnaire save(Questionnaire questionnaire) {
+        repository.put(questionnaire.getId(), questionnaire);
+        return questionnaire;
     }
 
     @Override
-    public void update(Questionnaire questionnaire) {
-        listQuestionnaires.put(questionnaire.getId(),questionnaire);
+    public boolean delete(int id, int partnerId) {
+        if (repository.containsKey(id) && repository.get(id).getPartnerId() == partnerId) {
+            repository.remove(id);
+            return true;
+        } else return false;
     }
 
     @Override
-    public void remove(Questionnaire id) {
-        listQuestionnaires.remove(Integer.parseInt(id.toString()));
+    public Questionnaire get(int id, int partnerId) {
+        if (repository.containsKey(id) && repository.get(id).getPartnerId() == partnerId) {
+            return repository.get(id);
+        } else return null;
     }
 
     @Override
-    public Questionnaire getById(Integer id) {
-        return listQuestionnaires.get(Integer.parseInt(id.toString()));
+    public Questionnaire get(Integer id, int clientId) {
+        if (repository.containsKey(id) && repository.get(id).getClientId() == clientId) {
+            return repository.get(id);
+        } else return null;
     }
 
     @Override
-    public Collection<Questionnaire> list() {
-        return listQuestionnaires.values();
+    public Collection<Questionnaire> getAll(int partnerId) {
+        Collection<Questionnaire> questionnaires = repository.entrySet().stream().filter(quest -> quest.getValue().getPartnerId() == partnerId).map(Map.Entry::getValue).collect(Collectors.toList());
+        return questionnaires;
     }
 
     @Override
-    public List<Questionnaire> queryFindByName(String name) {
-        return null;
+    public Collection<Questionnaire> getAll(Integer clientId) {
+        Collection<Questionnaire> questionnaires = repository.entrySet().stream().filter(quest -> quest.getValue().getClientId() == clientId).map(Map.Entry::getValue).collect(Collectors.toList());
+        return questionnaires;
+    }
+
+    @Override
+    public Collection<Questionnaire> getAll() {
+        Collection<Questionnaire> questionnaires = repository.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+        return questionnaires;
     }
 }

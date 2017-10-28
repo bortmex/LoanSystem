@@ -3,18 +3,19 @@ package ru.javaproject.repository;
 import ru.javaproject.model.Questionnaire;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface QuestRepository {
-    public void add(Questionnaire questionnaire);
+    Questionnaire save(Questionnaire questionnaire, int partnerId);
 
-    public void update(Questionnaire questionnaire);
+    boolean delete(int id, int partnerId);
 
-    public void remove(Questionnaire id);
+    Questionnaire get(int id, int partnerId);
 
-    public Questionnaire getById(Integer id);
+    Questionnaire get(Integer id, int clientId);
 
-    public Collection<Questionnaire> list();
+    Collection<Questionnaire> getAll(int partnerId);
 
-    public List<Questionnaire> queryFindByName(String name);
+    Collection<Questionnaire> getAll();
+
+    Collection<Questionnaire> getAll(Integer clientId);
 }

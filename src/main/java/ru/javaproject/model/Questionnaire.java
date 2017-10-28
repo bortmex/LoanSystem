@@ -1,24 +1,34 @@
 package ru.javaproject.model;
 
-public class Questionnaire {
+public class Questionnaire extends BaseEntity{
 
-    private Integer id;
+    private Integer clientId;
     //пол
-    private boolean floor;
+    private String floor;
 
-    private Integer age;
+    private int age;
     //доход
-    private Integer income;
+    private int income;
 
     private String productDescription;
 
-    private Integer productPrice;
+    private int productPrice;
     //срок кредита
-    private Integer credit_term_day;
+    private int credit_term_day;
 
-    private Integer partnerId;
+    private int partnerId;
 
-    public Questionnaire(boolean floor, Integer age, Integer income, String productDescription, Integer productPrice, Integer credit_term_day, Integer partnerId) {
+    private int decisionPartner;
+
+    private int decisionRepresentative;
+
+    public Questionnaire(String floor, int clientId, int age, int income, String productDescription, int productPrice, int credit_term_day, int partnerId) {
+        this(null, clientId, floor,age, income, productDescription, productPrice, credit_term_day, partnerId);
+    }
+
+    public Questionnaire(Integer id, int clientId, String floor, int age, int income, String productDescription, int productPrice, int credit_term_day, int partnerId) {
+        this.id = id;
+        this.clientId = clientId;
         this.floor = floor;
         this.age = age;
         this.income = income;
@@ -26,6 +36,40 @@ public class Questionnaire {
         this.productPrice = productPrice;
         this.credit_term_day = credit_term_day;
         this.partnerId = partnerId;
+        this.decisionPartner = 0;
+        this.decisionRepresentative = 0;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getIncome() {
+        return income;
+    }
+
+    public void setIncome(int income) {
+        this.income = income;
     }
 
     public String getProductDescription() {
@@ -36,70 +80,63 @@ public class Questionnaire {
         this.productDescription = productDescription;
     }
 
-    public Integer getProductPrice() {
+    public int getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(Integer productPrice) {
+    public void setProductPrice(int productPrice) {
         this.productPrice = productPrice;
     }
 
-    public Integer getPartnerId() {
-        return partnerId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public boolean isFloor() {
-        return floor;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public Integer getIncome() {
-        return income;
-    }
-
-    public Integer getCredit_term_day() {
+    public int getCredit_term_day() {
         return credit_term_day;
     }
 
-    public void setFloor(boolean floor) {
-        this.floor = floor;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setIncome(Integer income) {
-        this.income = income;
-    }
-
-    public void setCredit_term_day(Integer credit_term_day) {
+    public void setCredit_term_day(int credit_term_day) {
         this.credit_term_day = credit_term_day;
     }
 
-    public void setPartnerId(Integer partnerId) {
+    public int getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(int partnerId) {
         this.partnerId = partnerId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public int getDecisionPartner() {
+        return decisionPartner;
+    }
+
+    public void setDecisionPartner(int decisionPartner) {
+        this.decisionPartner = decisionPartner;
+    }
+
+    public int getDecisionRepresentative() {
+        return decisionRepresentative;
+    }
+
+    public void setDecisionRepresentative(int decisionRepresentative) {
+        this.decisionRepresentative = decisionRepresentative;
     }
 
     @Override
     public String toString() {
         return "Questionnaire{" +
-                "id=" + id +
+                "clientId=" + clientId +
                 ", floor=" + floor +
                 ", age=" + age +
                 ", income=" + income +
+                ", productDescription='" + productDescription + '\'' +
+                ", productPrice=" + productPrice +
                 ", credit_term_day=" + credit_term_day +
+                ", partnerId=" + partnerId +
+                ", decisionPartner=" + decisionPartner +
+                ", decisionRepresentative=" + decisionRepresentative +
                 '}';
     }
 }

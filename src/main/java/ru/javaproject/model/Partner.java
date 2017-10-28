@@ -1,46 +1,39 @@
 package ru.javaproject.model;
 
-import ru.javaproject.repository.mock.product.ProductRepository;
+public class Partner extends NamedEntity{
 
-public class Partner {
+    private String email;
 
-    private Integer id;
+    private String password;
 
-    private final String name;
-
-    private ProductRepository productDao;
-
-    public Partner(String name, ProductRepository productDao) {
-        this.name = name;
-        this.productDao = productDao;
+    public Partner(Integer id, String name, String email, String password) {
+        super(id, name);
+        this.email = email;
+        this.password = password;
     }
 
-    public Integer getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public ProductRepository getProductDao() {
-        return productDao;
-    }
-
-    public void setProductDao(ProductRepository productDao) {
-        this.productDao = productDao;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return "Partner{" +
-                "id=" + id +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
-                ", productDao=" + productDao +
                 '}';
     }
 }

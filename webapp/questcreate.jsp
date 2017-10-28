@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
-  User: alexa
+  Client: alexa
   Date: 25.10.2017
   Time: 21:09
   To change this template use File | Settings | File Templates.
@@ -23,11 +23,11 @@
 <h4>${product_price}</h4>
 
 <c:set var="productpartnerId" value="${partnerId}"/>
-
+<h4>${productpartnerId}</h4>
 <form method="POST" action='partner' name="frmAddQuest">
 
     <input type="hidden" readonly="readonly" name="questId"
-           value="<c:out value="${partner.id}" />" /> <br />
+           value="<c:out value="${partner.clientId}" />" /> <br />
     <input type="hidden" readonly="readonly" name="productpartnerId"
            value="<c:out value="${productpartnerId}" />" /> <br />
      <input type="hidden" readonly="readonly" name="product_description"

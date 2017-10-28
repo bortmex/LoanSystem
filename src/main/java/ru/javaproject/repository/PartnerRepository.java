@@ -1,19 +1,21 @@
 package ru.javaproject.repository;
 
-import java.util.Collection;
+import ru.javaproject.model.Partner;
+
 import java.util.List;
 
 public interface PartnerRepository {
 
-    public void add(ru.javaproject.model.Partner partner);
+    Partner save(Partner partner, int partnerId);
 
-    public void update(ru.javaproject.model.Partner partner);
+    boolean delete(int id, int partnerId);
 
-    public void remove(ru.javaproject.model.Partner id);
+    Partner get(int id, int partnerId);
 
-    public ru.javaproject.model.Partner getById(Integer id);
+    Partner get(int id);
 
-    public Collection<ru.javaproject.model.Partner> list();
+    List<Partner> getAll(int partnerId);
 
-    public List<ru.javaproject.model.Partner> queryFindByName(String name);
+    List<Partner> getAll();
+
 }

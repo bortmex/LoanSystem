@@ -1,47 +1,38 @@
 package ru.javaproject.model;
 
-public class Product {
-
-    private Integer id;
+public class Product extends NamedEntity{
 
     private final String description;
 
-    private final Integer price;
+    private final int price;
 
-    private final Integer partnerId;
+    private final int partnerId;
 
-    public Product(String description, Integer price, Integer partnerId) {
+    public Product(String description, int price, int partnerId) {
         this.description = description;
         this.price = price;
         this.partnerId = partnerId;
     }
 
-    public Integer getPartnerId() {
+    public int getPartnerId() {
         return partnerId;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;
     }
 
-    public Integer getPrice() {
+    public int getPrice() {
         return price;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
+                "description='" + description + '\'' +
                 ", price=" + price +
+                ", partnerId=" + partnerId +
                 '}';
     }
 }
