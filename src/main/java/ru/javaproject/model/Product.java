@@ -1,38 +1,64 @@
 package ru.javaproject.model;
 
+
+import javax.persistence.*;
+
+
+@NamedQueries({
+        @NamedQuery(name = Product.ALL_WITH_USERID, query = "SELECT p FROM Product p where p.partnerId = ?1"),
+        @NamedQuery(name = Product.ALL, query = "SELECT p FROM Product p")
+})
+
+@Entity
+@Table(name = "products")
 public class Product extends NamedEntity{
 
-    private final String description;
+    public static final String UPDATE = "Product.select";
+    public static final String DELETE = "Product.delete";
+    public static final String ALL_WITH_USERID = "Product.getAllWithUserID";
+    public static final String ALL = "Product.getAll";
+    public static final String ALL_BETWEEN = "Product.getAllBetween";
 
-    private final int price;
+    public Product(){
 
-    private final int partnerId;
+    }
 
-    public Product(String description, int price, int partnerId) {
-        this.description = description;
+    public Product(Integer id, String name, int price, int partnerId) {
+        super(id, name);
         this.price = price;
         this.partnerId = partnerId;
     }
 
-    public int getPartnerId() {
-        return partnerId;
-    }
+    private int price;
 
+    private int partnerId;
 
-    public String getDescription() {
-        return description;
+    protected Product(Integer id, String name) {
+        super(id, name);
     }
 
     public int getPrice() {
         return price;
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(int partnerId) {
+        this.partnerId = partnerId;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "description='" + description + '\'' +
-                ", price=" + price +
-                ", partnerId=" + partnerId +
+        return "Products{" +
+                "partnerId=" + partnerId +
+                ", name='" + name + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

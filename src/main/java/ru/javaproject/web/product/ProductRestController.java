@@ -6,38 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javaproject.model.Product;
 import ru.javaproject.service.ProductService;
-import ru.javaproject.web.AuthorizedPartner;
 
-import java.util.List;
+import java.util.Collection;
 
 @Controller
 public class ProductRestController {
-    protected final Logger LOG = LoggerFactory.getLogger(getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(ProductRestController.class);
 
     @Autowired
-    private final ProductService service;
+    private ProductService service;
 
-    public ProductRestController(ProductService service) {
-        this.service = service;
-    }
-
-    public List<Product> getAll(int partnerId) {
-        LOG.info("getAll for " + partnerId);
+    public Collection<Product> getAll(int partnerId){
         return service.getAll(partnerId);
     }
 
-    public Product get(int id) {
-        LOG.info("get " + id);
-        return service.get(id, AuthorizedPartner.id());
-    }
-
-    public Product create(Product product, int patnerId) {
-        LOG.info("create " + product);
-        return service.save(product, patnerId);
-    }
-
-    public void delete(int id) {
-        LOG.info("delete " + id);
-        service.delete(id, AuthorizedPartner.id());
+    public Collection<Product> getAll(){
+        return service.getAll();
     }
 }

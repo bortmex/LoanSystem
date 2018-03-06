@@ -2,20 +2,17 @@ package ru.javaproject.repository;
 
 import ru.javaproject.model.Product;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface ProductRepository {
-    Product save(Product product, int partnerId);
 
     Product save(Product product);
 
-    //void update(Product product);
+    boolean delete(int id);
 
-    boolean delete(int id, int partnerId);
+    Product get(int id);
 
-    Product getById(Integer id, int partnerId);
+    Collection<Product> getAll(int partnerId);
 
-    List<Product> getAll(int partnerId);
-
-    List<Product> getAll();
+    Collection<Product> getAll();
 }

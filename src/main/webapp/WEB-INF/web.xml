@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <display-name>LoanSystem</display-name>
+    
+    <servlet>
+        <servlet-name>creditapplicationServlet</servlet-name>
+        <servlet-class>ru.javaproject.web.CreditApplicationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>creditapplicationServlet</servlet-name>
+        <url-pattern>/creditapplication</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>productServlet</servlet-name>
+        <servlet-class>ru.javaproject.web.ProductServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>productServlet</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>userServlet</servlet-name>
+        <servlet-class>ru.javaproject.web.UserServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+
+</web-app>
