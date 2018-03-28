@@ -12,7 +12,9 @@
     <title>Partner List</title>
 </head>
 <body>
-<h3>userId: ${userId}</h3>
+<c:set var = "userid" value="${userId}"/>
+<h3>userId: ${userid}</h3>
+
 <table>
     <thead>
     <tr>
@@ -20,7 +22,7 @@
     </tr>
     </thead>
     <c:forEach items="${partners}" var="partners">
-        <jsp:useBean id="partners" scope="page" type="ru.javaproject.model.User"/>
+        <jsp:useBean id="partners" scope="page" type="ru.javaproject.loansystem.model.User"/>
         <tr>
             <td><a href="products?action=see&id=${partners.id}">${partners.name}</a></td>
         </tr>
@@ -33,25 +35,21 @@
 <table>
     <thead>
     <tr>
-        <th>userId</th>
-        <th>fio</th>
-        <th>dateBirth</th>
-        <th>dateTimeCreate</th>
-        <th>phoneNumber</th>
-        <th>anInitialFee</th>
+        <th>questionnaireId</th>
+        <th>productList</th>
         <th>statusOfApplicationParner</th>
         <th>statusOfApplicationRepresentative</th>
     </tr>
     </thead>
     <c:forEach items="${creditapplication}" var="creditapplication">
-        <jsp:useBean id="creditapplication" scope="page" type="ru.javaproject.model.CreditApplication"/>
+        <jsp:useBean id="creditapplication" scope="page" type="ru.javaproject.loansystem.model.CreditApplication"/>
         <tr>
-            <td>${creditapplication.userId}</td>
-            <td>${creditapplication.fio}</td>
-            <td>${creditapplication.dateBirth}</td>
-            <td>${creditapplication.dateTimeCreate}</td>
-            <td>${creditapplication.phoneNumber}</td>
-            <td>${creditapplication.anInitialFee}</td>
+            <td>${creditapplication.id}</td>
+            <td> <c:forEach items="${creditapplication.product}"  var="productCre">
+                <jsp:useBean id="productCre" scope="page" type="ru.javaproject.loansystem.model.Product"/>
+                ${productCre.name} ${productCre.description}
+                <c:set var = "productInfo" scope="page" value="${productCre.user.id}"/>
+            </c:forEach></td>
             <td>${creditapplication.statusOfApplicationParner}</td>
             <td>${creditapplication.statusOfApplicationRepresentative}</td>
         </tr>
