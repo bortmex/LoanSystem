@@ -11,7 +11,7 @@ import static ru.javaproject.loansystem.model.BaseEntity.START_SEQ;
 
 public class ProductTestData {
 
-    public static final ModelMatcher<Product> MATCHERPRODUCT = new ModelMatcher<>(
+    public static final ModelMatcher<Product> MATCHERPRODUCT = ModelMatcher.of(Product.class,
             (expected, actual) -> expected == actual ||
                     (Objects.equals(expected.getId(), actual.getId())
                             && Objects.equals(expected.getName(), actual.getName())
@@ -40,7 +40,7 @@ public class ProductTestData {
     public static final List<Product> PRODUCT_LIST1 = Arrays.asList(PRODUCT1, PRODUCT2, PRODUCT3, PRODUCT4);
 
     public static Product getCreatedProd() {
-        return PRODUCT1;
+        return new Product(null, "ferrari1234124", 100000, "cars555");
     }
 
     public static Product getUpdatedProd() {

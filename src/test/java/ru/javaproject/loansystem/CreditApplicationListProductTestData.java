@@ -18,7 +18,7 @@ public class CreditApplicationListProductTestData {
     public static final int CREDIT_APPLICATION_LIST_PRODUCT3_ID = START_SEQ + 19;
     public static final int CREDIT_APPLICATION_LIST_PRODUCT4_ID = START_SEQ + 20;
 
-    public static final ModelMatcher<CreditApplicationListProduct> MATCHER_LIST_PRODUCT_MODEL_MATCHER = new ModelMatcher<>();
+    public static final ModelMatcher<CreditApplicationListProduct> MATCHER_LIST_PRODUCT_MODEL_MATCHER = ModelMatcher.of(CreditApplicationListProduct.class);
 
     public static final CreditApplicationListProduct CREDIT_APPLICATION_LIST_PRODUCT1 = new CreditApplicationListProduct(CREDIT_APPLICATION_LIST_PRODUCT1_ID,
                                                                                                                          CREDIT_APPLICATION1_ID,PRODUCT1_ID);

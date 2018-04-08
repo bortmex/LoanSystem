@@ -1,15 +1,14 @@
-package ru.javaproject.loansystem.web;
+package ru.javaproject.loansystem.web.arealizationonlywithservlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.Role;
 import ru.javaproject.loansystem.model.User;
 import ru.javaproject.loansystem.util.UsersUtil;
 import ru.javaproject.loansystem.web.creditapplication.CreditApplicationRestController;
-import ru.javaproject.loansystem.web.product.ProductRestController;
 import ru.javaproject.loansystem.web.user.ProfileRestController;
 
 import javax.servlet.ServletConfig;
@@ -22,17 +21,14 @@ import java.io.IOException;
 public class ServletForRepresentative extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ServletForRepresentative.class);
 
-    private ConfigurableApplicationContext springContext;
     private ProfileRestController profileRestController;
-    private ProductRestController productRestController;
     private CreditApplicationRestController creditapplicationRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
         profileRestController = springContext.getBean(ProfileRestController.class);
-        productRestController = springContext.getBean(ProductRestController.class);
         creditapplicationRestController = springContext.getBean(CreditApplicationRestController.class);
     }
 

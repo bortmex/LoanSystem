@@ -30,9 +30,14 @@ public class Product extends NamedEntity{
 
     public Product(Integer id, String name, int price, String description) {
         super(id, name);
-        this.id= id;
         this.price = price;
         this.description = description;
+    }
+
+    public Product(Product product) {
+        super(product.id, product.name);
+        this.price = product.price;
+        this.description = product.description;
     }
 
     public Product(String name, int price, String description) {
@@ -41,7 +46,7 @@ public class Product extends NamedEntity{
         this.description = description;
     }
 
-    @Range(min = 10, max = 100000000)
+    @Range(min = 10, max = 10000000)
     private int price;
 
     @NotBlank

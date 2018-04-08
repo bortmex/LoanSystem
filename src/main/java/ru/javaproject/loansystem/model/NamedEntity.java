@@ -1,11 +1,14 @@
 package ru.javaproject.loansystem.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class NamedEntity extends BaseEntity{
 
+    @NotBlank
     @Column(name = "name", nullable = false)
     protected String name;
 

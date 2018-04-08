@@ -1,41 +1,32 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ru.javaproject.loansystem.model.Product" %>
-<%@ page import="java.util.ArrayList" %><%--
-  Created by IntelliJ IDEA.
-  User: alexa
-  Date: 02.03.2018
-  Time: 21:39
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <html>
 <head>
-    <title>Product list</title>
+    <title><fmt:message key="product.title"/></title>
 </head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
-<h1>TABLE</h1>
-<hr>
-<h3>partnerName: ${partnerName}</h3>
-<hr>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 
 <%
     List<Product> products = new ArrayList<>();
 %>
-<h2><a href="products">Back</a></h2>
+<h3><a href="partnerlist"><fmt:message key="common.back"/></a></h3>
 <table>
     <thead>
         <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>price</th>
-            <th>description</th>
+            <th><fmt:message key="product.name"/></th>
+            <th><fmt:message key="product.price"/></th>
+            <th><fmt:message key="product.description"/></th>
         </tr>
     </thead>
     <c:forEach items="${products}" var="product">
         <jsp:useBean id="product" scope="page" type="ru.javaproject.loansystem.model.Product"/>
         <tr>
-            <td>${product.id}</td>
             <td>${product.name}</td>
             <td>${product.price}</td>
             <td>${product.description}</td>
@@ -51,8 +42,8 @@
 %>
 
 <hr>
-<a href="products?action=see&use=create&id=${partnerId}">Create Credit Application</a>
+<a href="<c:url value='/see/create/${partnerId}'/>"><fmt:message key="credapps.create"/></a>
 <hr>
-
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

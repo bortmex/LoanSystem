@@ -7,8 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("JpaQlInspection")
 @NamedQueries({
@@ -46,7 +46,7 @@ public class CreditApplication extends BaseEntity {
         this.dateBirth = dateBirth;
         this.dateTimeCreate = dateTimeCreate;
         this.phoneNumber = phoneNumber;
-        this.productList = new HashSet<>();
+        this.productList = new ArrayList<>();
         this.anInitialFee = anInitialFee;
         this.statusOfApplicationParner = null;
         this.statusOfApplicationRepresentative = null;
@@ -68,16 +68,16 @@ public class CreditApplication extends BaseEntity {
     @NotBlank
     private String phoneNumber;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "credit_application_list_product",
             joinColumns = { @JoinColumn(name = "cred_app_id" , nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "productl_id" , nullable = false, updatable = false) }
     )
-    private Set<Product> productList = new HashSet<>();
+    private List<Product> productList = new ArrayList<>();
 
     @Column(name = "an_initial_fee")
-    @Range(min = 10, max = 100000000)
+    @Range(min = 10, max = 10000000)
     private Integer anInitialFee; //первоначальный взнос
 
     @Column(name = "status_of_application_parner")
@@ -138,11 +138,11 @@ public class CreditApplication extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<Product> getProduct() {
+    public List<Product> getProduct() {
         return productList;
     }
 
-    public void setProduct(Set<Product> productList) {
+    public void setProduct(List<Product> productList) {
         this.productList = productList;
     }
 

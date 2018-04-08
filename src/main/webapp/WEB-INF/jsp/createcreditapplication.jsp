@@ -10,28 +10,32 @@ Created by IntelliJ IDEA.
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="myfn" uri="http://loadsystem.ru/functions" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <html>
 <head>
-    <title>Create Credit Application</title>
+    <title><fmt:message key="credapps.create"/></title>
 </head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
 
     <jsp:useBean id="creditApplication" type="ru.javaproject.loansystem.model.CreditApplication" scope="request"/>
-    <form method="post" action="products">
-        <jsp:useBean id="partnerId" type="java.lang.Integer" scope="request"/>
-        <input type="hidden" name="partId" value="${partnerId}">
+    <c:url var="addAction" value="/creditApplication/add"/>
+    <form:form action="${addAction}" modelAttribute="creditApplication">
+        <input type="hidden" name="partnerId" value="${partnerId}">
         <input type="hidden" name="idcrapp" value="${creditApplication.id}">
         <dl>
-            <dt>FIO:</dt>
+            <dt><fmt:message key="credapps.fio"/>:</dt>
             <dd><input type="text" value="${creditApplication.fio}" name="fio"></dd>
         </dl>
         <dl>
-            <dt>DateBirsday</dt>
+            <dt><fmt:message key="credapps.date_birth"/>:</dt>
             <dd><input type="date" value="${creditApplication.dateBirth}" name="dateBirth"></dd>
         </dl>
         <dl>
-            <dt>Phone number</dt>
+            <dt><fmt:message key="credapps.phone_number"/>:</dt>
             <dd><input type="text" value="${creditApplication.phoneNumber}" name="phoneNumber"></dd>
         </dl>
             <c:forEach items="${products}" var="product">
@@ -64,13 +68,12 @@ Created by IntelliJ IDEA.
         </dl>
             </c:forEach>
         <dl>
-            <dt>An Initial Fee:</dt>
+            <dt><fmt:message key="credapps.an_initial_fee"/>:</dt>
             <dd><input type="number" value="${creditApplication.anInitialFee}" name="anInitialFee"></dd>
         </dl>
         <button type="submit">Save</button>
-        <button onclick="window.history.back()">Cancel</button>
-    </form>
+    </form:form>
 </section>
-
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

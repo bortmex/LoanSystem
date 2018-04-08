@@ -1,12 +1,12 @@
-package ru.javaproject.loansystem.web;
+package ru.javaproject.loansystem.web.arealizationonlywithservlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.*;
-import ru.javaproject.loansystem.util.PartnerListUtil;
+import ru.javaproject.loansystem.util.PartnerUtil;
 import ru.javaproject.loansystem.util.UsersUtil;
 import ru.javaproject.loansystem.web.creaditapplicationlistproduct.CreditApplicationListProductRestController;
 import ru.javaproject.loansystem.web.creditapplication.CreditApplicationRestController;
@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class ServletForUser extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ServletForUser.class);
 
-    private ConfigurableApplicationContext springContext;
     private ProductRestController productRestController;
     private ProfileRestController profileRestController;
     private CreditApplicationRestController creditapplicationRestController;
@@ -40,7 +39,8 @@ public class ServletForUser extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+
         productRestController = springContext.getBean(ProductRestController.class);
         profileRestController = springContext.getBean(ProfileRestController.class);
         creditapplicationRestController = springContext.getBean(CreditApplicationRestController.class);
@@ -61,15 +61,15 @@ public class ServletForUser extends HttpServlet {
                 req.setAttribute("partners", dsf1);
                 LOG.info("getAll for User {}", AuthorizedUser.id());
                 req.setAttribute("creditapplication", creditapplicationRestController.getAllForUsersId(AuthorizedUser.id()));
-                req.getRequestDispatcher("partnerList.jsp").forward(req, resp);
+                req.getRequestDispatcher("partnerlist.jsp").forward(req, resp);
             } else {
-                req.getRequestDispatcher("createCreditApplication.jsp").forward(req, resp);
+                req.getRequestDispatcher("createcreditapplication.jsp").forward(req, resp);
             }
 
         } else if (action.equals("see")) {
             String use = req.getParameter("use");
             if (use == null) {
-                req.setAttribute("products", PartnerListUtil.getProductListsFilteredByOnePartner((List<Product>) productRestController.getAll(), getReqInt(req, "id")));
+                req.setAttribute("products", PartnerUtil.getProductListsFilteredByOnePartner((List<Product>) productRestController.getAll(), getReqInt(req, "id")));
                 User partner = profileRestController.get(getReqInt(req, "id"));
                 req.setAttribute("partnerId", partner.getId());
                 req.setAttribute("partnerName", partner.getName());
@@ -81,11 +81,11 @@ public class ServletForUser extends HttpServlet {
 
                 LOG.info("method Create/Update creditapplication {}", creditApplication);
                 req.setAttribute("creditApplication", creditApplication);
-                List<Product> listProd = PartnerListUtil.getProductListsFilteredByOnePartner((List<Product>) productRestController.getAll(getReqInt(req, "id")), getReqInt(req, "id"));
+                List<Product> listProd = PartnerUtil.getProductListsFilteredByOnePartner((List<Product>) productRestController.getAll(getReqInt(req, "id")), getReqInt(req, "id"));
                 req.setAttribute("products", listProd);
                 req.setAttribute("productsTrue", creditApplication.getProduct());
                 req.setAttribute("partnerId", listProd.iterator().next().getUser().getId());
-                req.getRequestDispatcher("createCreditApplication.jsp").forward(req, resp);
+                req.getRequestDispatcher("createcreditapplication.jsp").forward(req, resp);
             }
         }
     }
@@ -108,7 +108,7 @@ public class ServletForUser extends HttpServlet {
             Set<Product> productList = new HashSet<>();
             String parnerId = req.getParameter("partId");
 
-            List<Product> partnerAllProduct = PartnerListUtil.getProductListsFilteredByOnePartner((List<Product>) productRestController.getAll(
+            List<Product> partnerAllProduct = PartnerUtil.getProductListsFilteredByOnePartner((List<Product>) productRestController.getAll(
                     Integer.parseInt(parnerId)), Integer.parseInt(parnerId));
             for (Product product : partnerAllProduct) {
                 String productId = req.getParameter("product" + product.getId());
@@ -141,16 +141,9 @@ public class ServletForUser extends HttpServlet {
             req.setAttribute("partners", dsf1);
             req.setAttribute("creditapplication", creditapplicationRestController.getAllForUsersId(AuthorizedUser.id()));
 
-            req.getRequestDispatcher("partnerList.jsp").forward(req, resp);
+            req.getRequestDispatcher("partnerlist.jsp").forward(req, resp);
         }
     }
-
-    @Override
-    public void destroy() {
-        springContext.close();
-        super.destroy();
-    }
-
     /**
      * Get param name with request and returt int
      */

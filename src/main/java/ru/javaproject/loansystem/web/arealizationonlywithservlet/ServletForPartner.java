@@ -1,14 +1,14 @@
-package ru.javaproject.loansystem.web;
+package ru.javaproject.loansystem.web.arealizationonlywithservlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.CreditApplication;
 import ru.javaproject.loansystem.model.Product;
 import ru.javaproject.loansystem.model.User;
-import ru.javaproject.loansystem.util.PartnerListUtil;
+import ru.javaproject.loansystem.util.PartnerUtil;
 import ru.javaproject.loansystem.util.UsersUtil;
 import ru.javaproject.loansystem.web.creditapplication.CreditApplicationRestController;
 import ru.javaproject.loansystem.web.product.ProductRestController;
@@ -26,7 +26,6 @@ import java.util.Objects;
 public class ServletForPartner extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ServletForPartner.class);
 
-    private ConfigurableApplicationContext springContext;
     private ProfileRestController profileRestController;
     private ProductRestController productRestController;
     private CreditApplicationRestController creditapplicationRestController;
@@ -34,7 +33,7 @@ public class ServletForPartner extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
         profileRestController = springContext.getBean(ProfileRestController.class);
         creditapplicationRestController = springContext.getBean(CreditApplicationRestController.class);
         productRestController = springContext.getBean(ProductRestController.class);
@@ -46,7 +45,7 @@ public class ServletForPartner extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");
         if (action == null) {
-            req.setAttribute("creditapplication", PartnerListUtil.getListsOfApplicationsForOnePartner((List<CreditApplication>) creditapplicationRestController.getAll(),AuthorizedUser.id()));
+            req.setAttribute("creditapplication", PartnerUtil.getListsOfApplicationsForOnePartner((List<CreditApplication>) creditapplicationRestController.getAll(),AuthorizedUser.id()));
             LOG.info("getAllcreditapplication");
             req.setAttribute("partnerName", profileRestController.get(AuthorizedUser.id()).getName());
             req.setAttribute("products", productRestController.getAll(AuthorizedUser.id()));
@@ -68,7 +67,7 @@ public class ServletForPartner extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String name = req.getParameter("name");
         if (name == null) {
-            int userId = Integer.valueOf(req.getParameter("Id"));
+            int userId = Integer.valueOf(req.getParameter("userId"));
             AuthorizedUser.setId(userId);
             User userAuthorized = profileRestController.get(AuthorizedUser.id());
             LOG.info("get User {}", userAuthorized);
@@ -82,7 +81,7 @@ public class ServletForPartner extends HttpServlet {
             final Product product = new Product(req.getParameter("name"), Integer.parseInt(req.getParameter("price")),
                     req.getParameter("description"));
                 LOG.info("Create {} Product", product);
-                productRestController.create(product);
+                productRestController.create(product, 1); //<--------partnerId
             resp.sendRedirect("partnerpage");
         }
     }

@@ -1,22 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: alexa
-  Date: 05.03.2018
-  Time: 0:20
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title><fmt:message key="representative.area"/></title>
 </head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
-<h3>representative Name: ${representativeName}</h3>
+<jsp:include page="fragments/bodyHeader.jsp"/>
+<h3><fmt:message key="representative.name"/>: ${representativeName}</h3>
 <br>
-<br>
-<br>
-<h3>Table All CreditApplication</h3>
+<h3><fmt:message key="representative.table.allCA"/></h3>
 <table>
     <thead>
     <tr>
@@ -48,32 +42,8 @@
     </c:forEach>
 
 </table>
-<br>
-<br>
-<br>
-<h3>All partner</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-    </tr>
-    </thead>
-    <c:forEach items="${partnersForRep}" var="partnersForRep">
-        <jsp:useBean id="partnersForRep" scope="page" type="ru.javaproject.loansystem.model.User"/>
-        <tr>
-            <td>${partnersForRep.name}</td>
-            <td>${partnersForRep.email}</td>
-        </tr>
-    </c:forEach>
 
-</table>
-    <br>
-    <br>
-    <br>
-
-    <hr>
-    <a href="representativepage?action=createpartner">Add Partner</a>
-    <hr>
+<a href="<c:url value='/showAllPartnerForRepresentative'/>"><fmt:message key="representative.allpartner"/></a>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

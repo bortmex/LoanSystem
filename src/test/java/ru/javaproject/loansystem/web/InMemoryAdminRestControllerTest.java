@@ -1,14 +1,16 @@
 package ru.javaproject.loansystem.web;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.javaproject.loansystem.UserTestData;
+import ru.javaproject.loansystem.model.User;
 import ru.javaproject.loansystem.repository.UserRepository;
+import ru.javaproject.loansystem.util.exception.NotFoundException;
 import ru.javaproject.loansystem.web.user.AdminRestController;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import static ru.javaproject.loansystem.UserTestData.ADMIN;
 import static ru.javaproject.loansystem.UserTestData.USER;
@@ -27,7 +29,8 @@ public class InMemoryAdminRestControllerTest {
 
     @AfterClass
     public static void afterClass() {
-        appCtx.close();
+        /*
+        appCtx.close();*/
     }
 
     @Before
@@ -38,7 +41,7 @@ public class InMemoryAdminRestControllerTest {
         repository.save(USER);
         repository.save(ADMIN);
     }
-/*
+
     @Test
     public void testDelete() throws Exception {
         controller.delete(UserTestData.USER_ID);
@@ -50,5 +53,5 @@ public class InMemoryAdminRestControllerTest {
     @Test(expected = NotFoundException.class)
     public void testDeleteNotFound() throws Exception {
         controller.delete(10);
-    }*/
+    }
 }

@@ -20,6 +20,9 @@ public class UsersUtil {
     public static boolean isPartner(User user){
         return user.getRoles().contains(Role.ROLE_PARTNER);
     }
+    public static boolean isAdmin(User user){
+        return user.getRoles().contains(Role.ROLE_ADMIN);
+    }
 
 
     public static boolean isRepresentative(User user){

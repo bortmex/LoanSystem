@@ -18,12 +18,12 @@ public class CreditApplicationTestData {
     public static final int CREDIT_APPLICATION2_ID = START_SEQ + 15;
     public static final int CREDIT_APPLICATION3_ID = START_SEQ + 16;
 
-    public static final ModelMatcher<CreditApplication> MATCHERCREDITAPPLICATION = new ModelMatcher<>(
+    public static final ModelMatcher<CreditApplication> MATCHERCREDITAPPLICATION = ModelMatcher.of(CreditApplication.class,
             (expected, actual) -> expected == actual ||
             (Objects.equals(expected.getId(), actual.getId())
             && Objects.equals(expected.getFio(), actual.getFio())
             && Objects.equals(expected.getDateBirth(), actual.getDateBirth())
-            && Objects.equals(expected.getDateTimeCreate(), actual.getDateTimeCreate())
+            /*&& Objects.equals(expected.getDateTimeCreate(), actual.getDateTimeCreate())*/
                     && Objects.equals(expected.getPhoneNumber(), actual.getPhoneNumber())
                     && Objects.equals(expected.getAnInitialFee(), actual.getAnInitialFee())
             )
@@ -43,12 +43,15 @@ public class CreditApplicationTestData {
                                                                                       "Вася1 Громов1", LocalDate.of(2000, 6, 1),
                                                                                       LocalDateTime.of(LocalDate.of(2010, 1, 11),
                                                                                       LocalTime.of(15, 4 , 0, 0)),
-                                                                                      "'89112312326'", 10012);
+                                                                                      "89112312326", 10012);
 
     public static final List<CreditApplication> CREDIT_APPLICATION_LIST_USER = Arrays.asList(CREDIT_APPLICATION1, CREDIT_APPLICATION2);
 
     public static CreditApplication getCreatedCA() {
-        return CREDIT_APPLICATION1;
+        return new CreditApplication(null,
+                "Новое имя", LocalDate.of(2000, 1, 21),
+                LocalDateTime.now(),
+                "89452342343", 10000);
     }
 
     public static CreditApplication getUpdatedCA() {

@@ -1,56 +1,53 @@
 package ru.javaproject.loansystem.web.product;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.Product;
-import ru.javaproject.loansystem.service.ProductService;
+import ru.javaproject.loansystem.util.PartnerUtil;
 
-import java.util.Collection;
+import java.net.URI;
+import java.util.List;
 
-import static ru.javaproject.loansystem.util.ValidationUtil.checkIdConsistent;
-import static ru.javaproject.loansystem.util.ValidationUtil.checkNew;
+@RestController
+@RequestMapping(value = ProductRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class ProductRestController extends AbstractProductRestController {
+    static final String REST_URL = "/rest/profile/products";
 
-@Controller
-public class ProductRestController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ProductRestController.class);
-
-    @Autowired
-    private ProductService service;
-
-    public Product get(int id){
-        LOG.info("get product {} for Partner {}", id, AuthorizedUser.id());
-        return service.get(id, AuthorizedUser.id());
+    @GetMapping("/user/see/{id}")
+    @ResponseBody
+    public List<Product> productAndPartnerId(@PathVariable("id") int id){
+        return PartnerUtil.getProductListsFilteredByOnePartner((List<Product>)super.getAll(), id);
     }
 
-    public void delete(int id) {
-        LOG.info("delete product {} for Partner {}", id, AuthorizedUser.id());
-        service.delete(id, AuthorizedUser.id());
+    @GetMapping("/{id}/{idpartner}")
+    @ResponseBody
+    public Product getForPartner(@PathVariable("id") int id, @PathVariable("idpartner") int idpartner) {
+        return super.get(id, idpartner);
     }
 
-    public Product create(Product product){
-        checkNew(product);
-        LOG.info("create product {} for Partner {}", product, AuthorizedUser.id());
-        return service.save(product, AuthorizedUser.id());
+    @GetMapping("/partner/create/{id}")
+    @ResponseBody
+    public Product productCreate(@PathVariable("id") int id){
+        return super.create(new Product("", 0, ""), id);
     }
 
-    public void update(Product product, int id) {
-        checkIdConsistent(product, id);
-        LOG.info("update {} for Partner {}", product, AuthorizedUser.id());
-        service.update(product, AuthorizedUser.id());
+    @GetMapping("/partner/showProductListForPartner")
+    @ResponseBody
+    public List<Product> getAllProductForPartner(){
+        return (List<Product>) getAll(AuthorizedUser.id());
     }
 
-    public Collection<Product> getAll(int partnerId){
-        LOG.info("getAll(partnerid) for Partner {}", partnerId);
-        return service.getAll(partnerId);
-    }
+    @PostMapping(value = "/partner/add/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Product> createWithLocation(@RequestBody Product product, @PathVariable("id") int id) {
+        Product created = super.create(product, id);
 
-    public Collection<Product> getAll(){
-        LOG.info("getAll() for Partner {}", AuthorizedUser.id());
-        return service.getAll();
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 }

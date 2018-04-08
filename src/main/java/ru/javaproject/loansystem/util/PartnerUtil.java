@@ -2,12 +2,14 @@ package ru.javaproject.loansystem.util;
 
 import ru.javaproject.loansystem.model.CreditApplication;
 import ru.javaproject.loansystem.model.Product;
+import ru.javaproject.loansystem.model.Role;
+import ru.javaproject.loansystem.model.User;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PartnerListUtil {
+public class PartnerUtil {
 
     //списки продуктов отфильтрованные по партнерам
     public static Map<Integer, List<Product>> getProductListsFilteredByPartner(List<Product> listProduct){
@@ -15,6 +17,12 @@ public class PartnerListUtil {
                 Collectors.groupingBy(x->x.getUser().getId())
         );
     }
+
+
+    public static List<User> getAllPartner(List<User> userList){
+        return userList.stream().filter(u -> u.getRoles().contains(Role.ROLE_PARTNER)).collect(Collectors.toList());
+    }
+
 
     //списки продуктов отфильтрованные по одному партнеру
     public static List<Product> getProductListsFilteredByOnePartner(List<Product> listProduct, int idPartner){
