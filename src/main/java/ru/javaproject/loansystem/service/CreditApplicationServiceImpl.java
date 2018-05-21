@@ -2,6 +2,7 @@ package ru.javaproject.loansystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javaproject.loansystem.model.CreditApplication;
 import ru.javaproject.loansystem.repository.CreditApplicationRepository;
@@ -20,6 +21,10 @@ public class CreditApplicationServiceImpl implements CreditApplicationService {
     @Override
     public CreditApplication get(int id, int userId) throws NotFoundException {
         return checkNotFoundWithId(repository.get(id, userId), id);
+    }
+    @Override
+    public CreditApplication get(int id) throws NotFoundException {
+        return checkNotFoundWithId(repository.get(id), id);
     }
 
     @Override
@@ -47,5 +52,26 @@ public class CreditApplicationServiceImpl implements CreditApplicationService {
     public CreditApplication save(CreditApplication creditApplication, int userId) {
         Assert.notNull(creditApplication, "meal must not be null");
         return repository.save(creditApplication, userId);
+    }
+
+    @Override
+    public CreditApplication save(CreditApplication creditApplication) {
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public void enablePart(int id, boolean enabled) {
+        CreditApplication creditApplication = get(id);
+        creditApplication.setStatusOfApplicationParner(enabled);
+        repository.save(creditApplication);
+    }
+
+    @Override
+    public void enableRepr(int id, boolean enabled) {
+        CreditApplication creditApplication = get(id);
+        creditApplication.setStatusOfApplicationRepresentative(enabled);
+        repository.save(creditApplication);
+
     }
 }

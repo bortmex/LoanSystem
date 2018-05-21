@@ -37,9 +37,6 @@ public class User extends NamedEntity{
     @Length(min = 5)
     private String password;
 
-    @Column(name = "enabled", nullable = false)
-    private boolean enabled = true;
-
     @Column(name = "registered", columnDefinition = "timestamp default now()")
     private Date registered = new Date();
 
@@ -54,36 +51,27 @@ public class User extends NamedEntity{
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Collection<Product> creditapplication;
+    private Collection<Product> products;
 
     public User() {
     }
 
     public User(User u) {
-        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRoles());
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getRoles());
     }
 
     public User(String name, String email, String password, Role role, Role... roles) {
-        this(null, name, email, password, true, EnumSet.of(role, roles));
+        this(null, name, email, password, EnumSet.of(role, roles));
     }
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, true, EnumSet.of(role, roles));
+        this(id, name, email, password, EnumSet.of(role, roles));
     }
 
-    public User(Integer id, String name, String email, String password, boolean enabled, Set<Role> roles) {
+    public User(Integer id, String name, String email, String password, Set<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
-        this.enabled = enabled;
         this.roles = roles;
-    }
-
-    public Collection<Product> getCreditapplication() {
-        return creditapplication;
-    }
-
-    public void setCreditapplication(Collection<Product> creditapplication) {
-        this.creditapplication = creditapplication;
     }
 
     public String getEmail() {
@@ -92,6 +80,14 @@ public class User extends NamedEntity{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Collection<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Collection<Product> products) {
+        this.products = products;
     }
 
     public void setPassword(String password) {
@@ -104,14 +100,6 @@ public class User extends NamedEntity{
 
     public void setRegistered(Date registered) {
         this.registered = registered;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
     public Set<Role> getRoles() {
@@ -132,7 +120,6 @@ public class User extends NamedEntity{
                 "id=" + id +
                 ", email=" + email +
                 ", name=" + name +
-                ", enabled=" + enabled +
                 ", roles=" + roles +
                 ')';
     }

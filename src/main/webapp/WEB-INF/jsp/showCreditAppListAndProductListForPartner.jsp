@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: alexa
@@ -10,16 +10,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title><fmt:message key="partner.area"/></title>
+    <title><spring:message code="partner.area"/></title>
 </head>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
-<jsp:include page="fragments/bodyHeader.jsp"/>
-<a href="<c:url value='/showCreditAppListForPartner'/>"><fmt:message key="credapps.forpartner"/></a>
-<br>
-<a href="<c:url value='/showproductlistforpartner'/>"><fmt:message key="product.my"/></a>
-<br>
-<a href="<c:url value='/crateredproduct'/>"><fmt:message key="product.create"/></a>
+<jsp:include page="fragments/bodyHeaderPart.jsp"/>
+<c:if test="${pageContext.request.queryString=='_addProduct'}">
+    <script type="text/javascript" src="resources/js/successAddProductOrCredApp.js" defer></script>
+</c:if>
+
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<script type="text/javascript">
+    var i18n = [];
+    <c:forEach var='key' items='<%=new String[]{"common.saved"}%>'>
+    i18n['${key}'] = '<spring:message code="${key}"/>';
+    </c:forEach>
+</script>
 </html>

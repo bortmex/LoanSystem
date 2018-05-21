@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Controller
-public class JspCreditApplicationController extends AbstractCreditApplicationRestController{
+public class JspCreditApplicationController extends AbstractCreditApplicationController{
 
     @Autowired
     private ProductService service;
@@ -53,7 +53,7 @@ public class JspCreditApplicationController extends AbstractCreditApplicationRes
 
     @GetMapping("/showcreditapplistforrepresentative")
     public String getPartnersAndCAForRepresent(Model model) {
-        model.addAttribute("creditapplications", getAll());
+        model.addAttribute("creditapplications", PartnerUtil.getListsOfApplicationsForRepr((List<CreditApplication>) getAll()));
         return "showCreditAppListForRepresentative";
     }
 

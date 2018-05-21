@@ -1,44 +1,109 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: alexa
-  Date: 07.04.2018
-  Time: 1:43
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://loadsystem.ru/functions" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title><fmt:message key="credapps.my"/></title>
-</head>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
-<jsp:include page="fragments/bodyHeader.jsp"/>
-<h3><a href="showCreditAppListAndProductListForPartner"><fmt:message key="common.back"/></a></h3>
+<script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
+<script type="text/javascript" src="resources/js/partUserDatatables.js" defer></script>
+<jsp:include page="fragments/bodyHeaderPart.jsp"/>
+<div class="container">
 
-<table>
-    <thead>
-    <tr>
-        <th><fmt:message key="credapps.fio"/></th>
-        <th><fmt:message key="product.title.ordered"/></th>
-        <th><fmt:message key="credapps.status_of_application_parner"/></th>
-    </tr>
-    </thead>
-    <c:forEach items="${creditapplication}" var="creditapplication">
-        <jsp:useBean id="creditapplication" scope="page" type="ru.javaproject.loansystem.model.CreditApplication"/>
-        <tr>
-            <td>${creditapplication.fio}</td>
-            <td> <c:forEach items="${creditapplication.product}"  var="productCre">
-                <jsp:useBean id="productCre" scope="page" type="ru.javaproject.loansystem.model.Product"/>
-                ${productCre.name}<br>
-            </c:forEach></td>
-            <td>${creditapplication.statusOfApplicationParner}</td>
-        </tr>
-    </c:forEach>
+    <form class="form-horizontal" id="detailsPartnerCredForm">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><spring:message code="credapps.title"/></h2>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover display" id="detCredAppForm">
+                    <thead>
+                        <tr>
+                            <th><spring:message code="credapps.id"/></th>
+                            <th><spring:message code="credapps.fio"/></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                <tbody>
+                <c:forEach items="${creditapplication}" var="creditapplication">
+                    <jsp:useBean id="creditapplication" scope="page" type="ru.javaproject.loansystem.model.CreditApplication"/>
+                    <tr>
+                        <td><c:out value="${creditapplication.id}"/></td>
+                        <td><c:out value="${creditapplication.fio}"/></td>
+                        <td><button type="button" class="btn btn-info" onclick="get(${creditapplication.id})"><spring:message code="credapps.more"/></button></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
 
-</table>
+<div class="modal fade" id="showCredApp">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="detailsFormProduct">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><spring:message code="product.description"/></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name1" class="control-label col-xs-3"><spring:message code="credapps.id"/></label>
 
+                        <div class="col-xs-9">
+                            <div class="form-control" id="name1" name="name1"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name2" class="control-label col-xs-3"><spring:message code="credapps.fio"/></label>
+
+                        <div class="col-xs-9">
+                            <div class="form-control" id="name2" name="name2"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name3" class="control-label col-xs-3"><spring:message code="credapps.phone_number"/></label>
+
+                        <div class="col-xs-9">
+                            <div class="form-control" id="name3" name="name3"></div>
+                        </div>
+                    </div>
+
+                   <div class="form-group">
+                        <label for="name4" class="control-label col-xs-3"><spring:message code="credapps.products"/></label>
+
+                        <div class="col-xs-9">
+                            <textarea style="resize: none; overflow: hidden; background: white"
+                                      class="form-control" rows="1" readonly id="name4" name="name4"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="button1Ok"  name="button1Ok" class="btn btn-success"><spring:message code="partner.approve"/></button>
+                    <button id="button2NoOk" name="button2NoOk" class="btn btn-danger"><spring:message code="partner.refuse"/></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="select.close"/></button>
+                    <%--<input type="button" class="btn btn-default" data-dismiss="modal" value="<spring:message code="select.close"/>">--%>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<script type="text/javascript">
+    var i18n = [];
+    <c:forEach var='key' items='<%=new String[]{"credapps.more", "common.enable", "common.dontenable", "common.failed"}%>'>
+    i18n['${key}'] = '<spring:message code="${key}"/>';
+    </c:forEach>
+</script>
 </html>

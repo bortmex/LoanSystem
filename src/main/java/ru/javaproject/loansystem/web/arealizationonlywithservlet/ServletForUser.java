@@ -8,9 +8,9 @@ import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.*;
 import ru.javaproject.loansystem.util.PartnerUtil;
 import ru.javaproject.loansystem.util.UsersUtil;
-import ru.javaproject.loansystem.web.creaditapplicationlistproduct.CreditApplicationListProductRestController;
+import ru.javaproject.loansystem.web.creaditapplicationlistproduct.AbstractCreditApplicationListProductController;
 import ru.javaproject.loansystem.web.creditapplication.CreditApplicationRestController;
-import ru.javaproject.loansystem.web.product.ProductRestController;
+import ru.javaproject.loansystem.web.product.ProductController;
 import ru.javaproject.loansystem.web.user.ProfileRestController;
 
 import javax.servlet.ServletConfig;
@@ -31,20 +31,20 @@ import java.util.stream.Collectors;
 public class ServletForUser extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ServletForUser.class);
 
-    private ProductRestController productRestController;
+    private ProductController productRestController;
     private ProfileRestController profileRestController;
     private CreditApplicationRestController creditapplicationRestController;
-    private CreditApplicationListProductRestController creditApplicationListProductRestController;
+    private AbstractCreditApplicationListProductController creditApplicationListProductRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 
-        productRestController = springContext.getBean(ProductRestController.class);
+        productRestController = springContext.getBean(ProductController.class);
         profileRestController = springContext.getBean(ProfileRestController.class);
         creditapplicationRestController = springContext.getBean(CreditApplicationRestController.class);
-        creditApplicationListProductRestController = springContext.getBean(CreditApplicationListProductRestController.class);
+        creditApplicationListProductRestController = springContext.getBean(AbstractCreditApplicationListProductController.class);
     }
 
     @Override

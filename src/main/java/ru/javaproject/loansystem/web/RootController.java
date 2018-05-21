@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.User;
 import ru.javaproject.loansystem.service.UserService;
@@ -29,7 +28,7 @@ public class RootController {
         return "index";
     }
 
-    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
+    @PostMapping("/authorization")
     public String takeUser(HttpServletRequest req) {
         int userId = Integer.valueOf(req.getParameter("userId"));
         AuthorizedUser.setId(userId);
@@ -45,24 +44,36 @@ public class RootController {
             return "redirect:/partnerlist";
     }
 
-    @GetMapping(value = "/users")
-    public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAll());
-        return "users";
+/*    @GetMapping("/partner/create")
+    public String createPartner(Model model) {
+        model.addAttribute("user",new User("","","", Role.ROLE_PARTNER));
+        return "createPartner";
     }
 
-    @GetMapping( value = "/showAllPartnerForRepresentative")
+    @PostMapping("/partner/add")
+    public String addPartner(HttpServletRequest req) {
+        userService.save(new User(req.getParameter("name"),req.getParameter("email"),req.getParameter("password"), Role.ROLE_PARTNER));
+        return "redirect:/showAllPartnerForRepresentative";
+    }*/
+
+    @GetMapping("/users")
+    public String getAllUsers(Model model) {
+        model.addAttribute("users", userService.getAll());
+        return "allusers";
+    }
+
+    @GetMapping("/showAllPartnerForRepresentative")
     public String getPartnersAndCAForRepresent(Model model) {
         model.addAttribute("partnersForRep", UsersUtil.getAllPartnerList(userService.getAll()));
         return "showAndCreatePartnerForRepresentative";
     }
 
-    @GetMapping( value = "/showCreditAppListAndProductListForPartner")
+    @GetMapping("/showCreditAppListAndProductListForPartner")
     public String getStartPageForPartner() {
         return "showCreditAppListAndProductListForPartner";
     }
 
-    @GetMapping(value = "/partnerlist")
+    @GetMapping("/partnerlist")
     public String partnersAndCAForuser(Model model) {
         model.addAttribute("partners", PartnerUtil.getAllPartner(userService.getAll()));
         return "partnerlist";

@@ -14,16 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-public class JspProductController extends AbstractProductRestController{
+public class JspProductController extends AbstractProductController {
 
     @RequestMapping("/see/{id}")
     public String productAndPartnerId(@PathVariable("id") int id, Model model){
-        model.addAttribute("products", PartnerUtil.getProductListsFilteredByOnePartner((List<Product>) getAll(), id));
+        List<Product> listProduct = PartnerUtil.getProductListsFilteredByOnePartner((List<Product>) getAll(), id);
+        model.addAttribute("products", listProduct);
         model.addAttribute("partnerId", id);
+        model.addAttribute("partnerName", listProduct.iterator().next().getUser().getName());
         return "product";
     }
 
-    @RequestMapping("/crateredproduct")
+    @RequestMapping("/createredproduct")
     public String productCreate(Model model){
         final Product product = new Product("", 0, "");
         model.addAttribute("product", product);
@@ -37,7 +39,7 @@ public class JspProductController extends AbstractProductRestController{
         return "showProductListForPartner";
     }
 
-    @PostMapping("/partner/add")
+    @PostMapping("/partner/product/add")
     public String productAdd(HttpServletRequest req){
         create(new Product(req.getParameter("name"), Integer.parseInt(req.getParameter("price")),req.getParameter("description")), AuthorizedUser.id());
         return "redirect:/showCreditAppListAndProductListForPartner";

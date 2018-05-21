@@ -22,7 +22,7 @@ import static ru.javaproject.loansystem.UserTestData.PARTNER2_ID;
 
 public class ProductRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = ProductRestController.REST_URL + '/';
+    private static final String REST_URL = ProductController.REST_URL + '/';
 
     @Autowired
     private ProductService service;

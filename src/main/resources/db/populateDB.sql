@@ -47,8 +47,8 @@ insert into products (name, price, description, partnerid) values
 
 insert into credit_application (userid, fio, date_birth,
 date_time_create, phone_number, an_initial_fee, status_of_application_parner, status_of_application_representative) values
-(100000,'Вася Громов','2015-05-31', '2010-07-11 15:04:00', '89104567896', 10000, null , null),
-(100000,'Вася Громов','1975-06-01', '2010-07-11 15:04:00', '89112312316', 10012, null , null),
+(100000,'Вася Громов','2015-05-31', '2010-07-11 15:04:00', '89104567896', 10000, null, null),
+(100000,'Вася Громов','1975-06-01', '2010-07-11 15:04:00', '89112312316', 10012, null, null),
 (100001,'Вася1 Громов1','2000-06-01', '2010-01-11 15:04:00', '89112312326', 10012, null , null);
 
 insert into credit_application_list_product(cred_app_id, productl_id) values

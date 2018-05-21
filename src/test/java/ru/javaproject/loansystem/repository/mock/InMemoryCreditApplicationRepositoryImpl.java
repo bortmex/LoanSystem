@@ -38,6 +38,16 @@ public class InMemoryCreditApplicationRepositoryImpl implements CreditApplicatio
         return creditApplication;
     }
 
+    @Override
+    public CreditApplication save(CreditApplication creaditApplication) {
+        if (creaditApplication.isNew()) {
+            creaditApplication.setId(counter.incrementAndGet());
+        }
+        Map<Integer, CreditApplication> creditapplications = repository.computeIfAbsent(creaditApplication.getId(), ConcurrentHashMap::new);
+        repository.put(creaditApplication.getId(), creditapplications);
+        return creaditApplication;
+    }
+
     @PostConstruct
     public void postConstruct() {
         LOG.info("+++ PostConstruct");
@@ -58,6 +68,12 @@ public class InMemoryCreditApplicationRepositoryImpl implements CreditApplicatio
     public CreditApplication get(int id, int userId) {
         Map<Integer, CreditApplication> products = repository.get(userId);
         return products == null ? null : products.get(id);
+    }
+
+    @Override
+    public CreditApplication get(int id) {
+        /*return repository.get(id);*/
+        return null;
     }
 
     @Override

@@ -11,7 +11,7 @@ import ru.javaproject.loansystem.model.User;
 import ru.javaproject.loansystem.util.PartnerUtil;
 import ru.javaproject.loansystem.util.UsersUtil;
 import ru.javaproject.loansystem.web.creditapplication.CreditApplicationRestController;
-import ru.javaproject.loansystem.web.product.ProductRestController;
+import ru.javaproject.loansystem.web.product.ProductController;
 import ru.javaproject.loansystem.web.user.ProfileRestController;
 
 import javax.servlet.ServletConfig;
@@ -27,7 +27,7 @@ public class ServletForPartner extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(ServletForPartner.class);
 
     private ProfileRestController profileRestController;
-    private ProductRestController productRestController;
+    private ProductController productRestController;
     private CreditApplicationRestController creditapplicationRestController;
 
     @Override
@@ -36,7 +36,7 @@ public class ServletForPartner extends HttpServlet {
         WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
         profileRestController = springContext.getBean(ProfileRestController.class);
         creditapplicationRestController = springContext.getBean(CreditApplicationRestController.class);
-        productRestController = springContext.getBean(ProductRestController.class);
+        productRestController = springContext.getBean(ProductController.class);
     }
 
     @Override

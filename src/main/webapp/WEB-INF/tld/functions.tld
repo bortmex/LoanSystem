@@ -15,4 +15,16 @@
             java.lang.Object)</function-signature>
     </function>
 
+    <function>
+        <name>formatDateTime</name>
+        <function-class>ru.javaproject.loansystem.util.DateTimeUtil</function-class>
+        <function-signature>java.lang.String toString(java.time.LocalDateTime)</function-signature>
+    </function>
+
+    <function>
+        <name>formatDate</name>
+        <function-class>ru.javaproject.loansystem.util.DateTimeUtil</function-class>
+        <function-signature>java.lang.String toStringLocalData(java.time.LocalDate))</function-signature>
+    </function>
+
 </taglib>

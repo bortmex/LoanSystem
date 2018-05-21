@@ -20,6 +20,17 @@ public class JpaCreditApplicationRepositoryImpl implements CreditApplicationRepo
 
     @Override
     @Transactional
+    public CreditApplication save(CreditApplication creditapplication) {
+        if (creditapplication.isNew()) {
+            em.persist(creditapplication);
+            return creditapplication;
+        } else {
+            return em.merge(creditapplication);
+        }
+    }
+
+    @Override
+    @Transactional
     public CreditApplication save(CreditApplication creaditApplication, int userId) {
         User ref = em.getReference(User.class, userId);
         creaditApplication.setUser(ref);
@@ -39,6 +50,11 @@ public class JpaCreditApplicationRepositoryImpl implements CreditApplicationRepo
     @Transactional
     public boolean delete(int id, int userId) {
         return em.createNamedQuery(CreditApplication.DELETE).setParameter("id", id).setParameter(1,userId).executeUpdate() != 0;
+    }
+
+    @Override
+    public CreditApplication get(int id) {
+        return em.find(CreditApplication.class, id);
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = CreditApplicationRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class CreditApplicationRestController extends AbstractCreditApplicationRestController {
+public class CreditApplicationRestController extends AbstractCreditApplicationController {
     public static final String REST_URL = "/rest/profile/credapp";
 
     @Autowired
@@ -62,7 +62,7 @@ public class CreditApplicationRestController extends AbstractCreditApplicationRe
     @GetMapping( value = "/resentative/showcreditapplistforrepresentative")
     @ResponseBody
     public List<CreditApplication> getPartnersAndCAForRepresent() {
-        return (List<CreditApplication>) getAll();
+        return PartnerUtil.getListsOfApplicationsForRepr((List<CreditApplication>) getAll());
     }
 
     @PostMapping(value = "/creditApplication/add/{partnerid}", consumes = MediaType.APPLICATION_JSON_VALUE)

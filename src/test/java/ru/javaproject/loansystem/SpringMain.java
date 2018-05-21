@@ -3,8 +3,8 @@ package ru.javaproject.loansystem;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import ru.javaproject.loansystem.model.Product;
 import ru.javaproject.loansystem.model.User;
-import ru.javaproject.loansystem.web.product.AbstractProductRestController;
-import ru.javaproject.loansystem.web.product.ProductRestController;
+import ru.javaproject.loansystem.web.product.AbstractProductController;
+import ru.javaproject.loansystem.web.product.ProductController;
 import ru.javaproject.loansystem.web.user.AdminRestController;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class SpringMain {
             List<User> users = adminUserController.getAll();
             System.out.println(users);
 
-            AbstractProductRestController productRestController = appCtx.getBean(ProductRestController.class);
+            AbstractProductController productRestController = appCtx.getBean(ProductController.class);
             productRestController.create(new Product( "ferrari1", 100000, "cars"), 100004);
             System.out.println();
         }

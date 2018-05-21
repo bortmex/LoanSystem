@@ -9,8 +9,9 @@
        xmlns:context="http://www.springframework.org/schema/context">
 
     <import resource="spring-tools.xml"/>
+    <import resource="spring-security.xml"/>
 
-   <context:annotation-config/>
+    <context:annotation-config/>
 
     <context:component-scan base-package="ru.javaproject.loansystem.service"/>
 
