@@ -23,7 +23,8 @@
 
         <hibernate.version>5.2.12.Final</hibernate.version>
         <hibernate-validator.version>5.3.4.Final</hibernate-validator.version>
-
+        <postgresql.version>42.1.4</postgresql.version>
+        <tomcat.version>8.5.24</tomcat.version>
 
         <webjars-bootstrap.version>3.3.7-1</webjars-bootstrap.version>
         <webjars-jquery.version><!--3.1.1-1-->3.2.1</webjars-jquery.version>
@@ -332,6 +333,48 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+        <profile>
+        <id>heroku</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>com.github.jsimone</groupId>
+                                        <artifactId>webapp-runner</artifactId>
+                                        <version>8.5.11.2</version>
+                                        <destFileName>webapp-runner.jar</destFileName>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+        <dependencies>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+        </dependencies>
+    </profile>
     </profiles>
 
     <dependencyManagement>

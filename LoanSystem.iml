@@ -23,6 +23,7 @@
           <file>file://$MODULE_DIR$/src/main/resources/spring/spring-tools.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring/spring-mvc.xml</file>
         </fileset>
+        <fileset id="web application context" profiles="heroku" autodetected="true" />
       </configuration>
     </facet>
     <facet type="hibernate" name="Hibernate">
