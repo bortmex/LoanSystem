@@ -13,7 +13,8 @@ CREATE TABLE users
   name       VARCHAR NOT NULL,
   email      VARCHAR NOT NULL,
   password   VARCHAR NOT NULL,
-  registered TIMESTAMP DEFAULT now()
+  registered TIMESTAMP DEFAULT now(),
+  enabled    BOOL DEFAULT TRUE
 );
 
 CREATE UNIQUE INDEX users_unique_email_idx ON users (email);
@@ -32,6 +33,7 @@ CREATE TABLE products
     price       INTEGER not null,
     description VARCHAR not null,
     partnerid   INTEGER not null,
+    CONSTRAINT product_name_partner_idx UNIQUE (name, partnerid),
     FOREIGN KEY (partnerid) REFERENCES users (id) ON DELETE CASCADE
 );
 

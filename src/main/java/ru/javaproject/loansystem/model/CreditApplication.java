@@ -14,8 +14,11 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = CreditApplication.ALL_WHERE_USER_ID, query = "SELECT ca FROM CreditApplication ca where ca.user.id = ?1 ORDER BY ca.id"),
         @NamedQuery(name = CreditApplication.ALL, query = "SELECT ca FROM CreditApplication ca ORDER BY ca.id"),
-        @NamedQuery(name = CreditApplication.UPDATE, query = "UPDATE CreditApplication ca SET ca.fio=:fio, ca.dateBirth=:dateBirth, " +
+        @NamedQuery(name = CreditApplication.UPDATEWITHUSERID, query = "UPDATE CreditApplication ca SET ca.fio=:fio, ca.dateBirth=:dateBirth, " +
                 "ca.dateTimeCreate=:dateTimeCreate, ca.phoneNumber=:phoneNumber, ca.anInitialFee=:anInitialFee WHERE ca.id=:id and ca.user.id=?1"),
+        @NamedQuery(name = CreditApplication.UPDATE, query = "UPDATE CreditApplication ca SET ca.fio=:fio, ca.dateBirth=:dateBirth, " +
+                "ca.dateTimeCreate=:dateTimeCreate, ca.phoneNumber=:phoneNumber, ca.anInitialFee=:anInitialFee WHERE ca.id=:id"),
+        @NamedQuery(name = CreditApplication.DELETEWITHOUTUSERID, query = "DELETE FROM CreditApplication ca WHERE ca.id=:id"),
         @NamedQuery(name = CreditApplication.DELETE, query = "DELETE FROM CreditApplication ca WHERE ca.id=:id and ca.user.id=?1"),
 
 })
@@ -27,7 +30,9 @@ public class CreditApplication extends BaseEntity {
 
     public static final String ALL_WHERE_USER_ID = "CreditApplication.getAllWhereUserId";
     public static final String ALL = "CreditApplication.getAll";
+    public static final String DELETEWITHOUTUSERID = "CreditApplication.delete.with.out.userid";
     public static final String DELETE = "CreditApplication.delete";
+    public static final String UPDATEWITHUSERID = "CreditApplication.select.with.user.id";
     public static final String UPDATE = "CreditApplication.select";
 
     public CreditApplication(){
@@ -68,7 +73,7 @@ public class CreditApplication extends BaseEntity {
     @NotBlank
     private String phoneNumber;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "credit_application_list_product",
             joinColumns = { @JoinColumn(name = "cred_app_id" , nullable = false, updatable = false) },
@@ -86,8 +91,8 @@ public class CreditApplication extends BaseEntity {
     @Column(name = "status_of_application_representative")
     private Boolean statusOfApplicationRepresentative;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userid", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="userid")
     private User user;
 
     public void addProduct(Product product){

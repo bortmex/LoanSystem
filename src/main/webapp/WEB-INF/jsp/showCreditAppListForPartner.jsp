@@ -10,7 +10,7 @@
 <body>
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/partUserDatatables.js" defer></script>
-<jsp:include page="fragments/bodyHeaderPart.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <div class="container">
 
     <form class="form-horizontal" id="detailsPartnerCredForm">
@@ -30,16 +30,6 @@
                             <th></th>
                         </tr>
                     </thead>
-                <tbody>
-                <c:forEach items="${creditapplication}" var="creditapplication">
-                    <jsp:useBean id="creditapplication" scope="page" type="ru.javaproject.loansystem.model.CreditApplication"/>
-                    <tr>
-                        <td><c:out value="${creditapplication.id}"/></td>
-                        <td><c:out value="${creditapplication.fio}"/></td>
-                        <td><button type="button" class="btn btn-info" onclick="get(${creditapplication.id})"><spring:message code="credapps.more"/></button></td>
-                    </tr>
-                </c:forEach>
-                </tbody>
             </table>
         </div>
     </form>
@@ -92,7 +82,6 @@
                     <button id="button1Ok"  name="button1Ok" class="btn btn-success"><spring:message code="partner.approve"/></button>
                     <button id="button2NoOk" name="button2NoOk" class="btn btn-danger"><spring:message code="partner.refuse"/></button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="select.close"/></button>
-                    <%--<input type="button" class="btn btn-default" data-dismiss="modal" value="<spring:message code="select.close"/>">--%>
                 </div>
             </form>
         </div>
@@ -100,10 +89,4 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
-<script type="text/javascript">
-    var i18n = [];
-    <c:forEach var='key' items='<%=new String[]{"credapps.more", "common.enable", "common.dontenable", "common.failed"}%>'>
-    i18n['${key}'] = '<spring:message code="${key}"/>';
-    </c:forEach>
-</script>
 </html>

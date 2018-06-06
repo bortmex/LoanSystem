@@ -25,7 +25,10 @@ public class JpaCreditApplicationRepositoryImpl implements CreditApplicationRepo
             em.persist(creditapplication);
             return creditapplication;
         } else {
-            return em.merge(creditapplication);
+            return em.createNamedQuery(CreditApplication.UPDATE).setParameter("id", creditapplication.getId()).setParameter("fio", creditapplication.getFio())
+                    .setParameter("dateBirth", creditapplication.getDateBirth()).setParameter("dateTimeCreate", LocalDateTime.now())
+                    .setParameter("dateTimeCreate", LocalDateTime.now()).setParameter("phoneNumber", creditapplication.getPhoneNumber())
+                    .setParameter("anInitialFee", creditapplication.getAnInitialFee()).executeUpdate() != 0 ? em.merge(creditapplication) : null;
         }
     }
 
@@ -38,7 +41,7 @@ public class JpaCreditApplicationRepositoryImpl implements CreditApplicationRepo
             em.persist(creaditApplication);
             return creaditApplication;
         }else {
-            return em.createNamedQuery(CreditApplication.UPDATE).setParameter("id", creaditApplication.getId()).setParameter("fio", creaditApplication.getFio())
+            return em.createNamedQuery(CreditApplication.UPDATEWITHUSERID).setParameter("id", creaditApplication.getId()).setParameter("fio", creaditApplication.getFio())
                     .setParameter("dateBirth", creaditApplication.getDateBirth())
                     .setParameter("dateTimeCreate", LocalDateTime.now()).setParameter("phoneNumber", creaditApplication.getPhoneNumber())
                     .setParameter("anInitialFee", creaditApplication.getAnInitialFee())
@@ -53,15 +56,19 @@ public class JpaCreditApplicationRepositoryImpl implements CreditApplicationRepo
     }
 
     @Override
+    @Transactional
+    public boolean delete(int id) {
+        return em.createNamedQuery(CreditApplication.DELETEWITHOUTUSERID).setParameter("id", id).executeUpdate() != 0;
+    }
+
+    @Override
     public CreditApplication get(int id) {
         return em.find(CreditApplication.class, id);
     }
 
     @Override
     public CreditApplication get(int id, int userId) {
-        CreditApplication creditApplication = em.find(CreditApplication.class, id);/*
-        User ref = em.getReference(User.class, userId);
-        creditApplication.setUser(ref);*/
+        CreditApplication creditApplication = em.find(CreditApplication.class, id);
         return creditApplication.getUser().getId()==userId ? creditApplication : null;
     }
 

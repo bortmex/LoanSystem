@@ -16,7 +16,7 @@
     <title><spring:message code="representative.allpartner"/></title>
 </head>
 <body>
-<jsp:include page="fragments/bodyHeaderRepres.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="container">
     <div class="table-wrapper">
@@ -38,16 +38,6 @@
                 <th><spring:message code="users.password"/></th>
             </tr>
             </thead>
-            <tbody>
-            <c:forEach items="${partnersForRep}" var="partnersForRep">
-                <jsp:useBean id="partnersForRep" scope="page" type="ru.javaproject.loansystem.model.User"/>
-                <tr>
-                    <td><c:out value="${partnersForRep.name}"/></td>
-                    <td><a href="mailto:${partnersForRep.email}">${partnersForRep.email}</a></td>
-                    <td><c:out value="${partnersForRep.password}"/></td>
-                </tr>
-            </c:forEach>
-            </tbody>
         </table>
     </div>
 </div>
@@ -61,7 +51,7 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" method="post" id="detailsForm">
-                    <input type="text" hidden="hidden" id="id" name="id">
+                    <input type="hidden" id="id" name="id">
 
                     <div class="form-group">
                         <label for="name" class="control-label col-xs-3"><spring:message code="users.name"/></label>
@@ -85,6 +75,10 @@
                         <div class="col-xs-9">
                             <input type="password" class="form-control" id="password" name="password" placeholder="<spring:message code="users.password"/>">
                         </div>
+                    </div>
+
+                    <div>
+                        <input type="hidden" id="roles" name="roles"/>
                     </div>
 
                     <div class="form-group">

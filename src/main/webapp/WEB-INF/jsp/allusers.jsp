@@ -5,6 +5,7 @@
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
+<script type="text/javascript" src="resources/js/moment.js" defer></script>
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/userDatatables.js" defer></script>
 <head>
@@ -20,7 +21,7 @@
                     <h2><spring:message code="users.title"/></h2>
                 </div>
                 <div class="col-sm-6">
-                    <a onclick="add()" class="btn btn-default"><i class="material-icons">&#xE147;</i> <span><spring:message code="users.add"/></span></a>
+                    <a onclick="add('<spring:message code="users.add"/>')" class="btn btn-default"><i class="material-icons">&#xE147;</i> <span><spring:message code="users.add"/></span></a>
                 </div>
             </div>
         </div>
@@ -30,45 +31,28 @@
                 <th><spring:message code="users.name"/></th>
                 <th><spring:message code="users.email"/></th>
                 <th><spring:message code="users.roles"/></th>
+                <th><spring:message code="users.active"/></th>
                 <th><spring:message code="users.registered"/></th>
                 <th></th>
                 <th></th>
             </tr>
             </thead>
-            <tbody>
-            <c:forEach items="${users}" var="user">
-                <jsp:useBean id="user" scope="page" type="ru.javaproject.loansystem.model.User"/>
-                <tr>
-                    <td><c:out value="${user.name}"/></td>
-                    <td><a href="mailto:${user.email}">${user.email}</a></td>
-                    <td>${user.roles}</td>
-                    <td><fmt:formatDate type="date" value="${user.registered}" pattern="dd-MMMM-yyyy"/></td>
-                    <td><a class="btn btn-xs edit" id="${user.id}">
-                        <span class="material-icons" aria-hidden="true">&#xE254;</span>
-                    </a></td>
-                    <td><a class="btn btn-xs delete" onclick="deleteRow(${user.id})">
-                        <span class="material-icons" aria-hidden="true">&#xE872;</span>
-                    </a></td>
-                </tr>
-            </c:forEach>
-            </tbody>
         </table>
     </div>
 </div>
 
-<jsp:include page="fragments/footer.jsp"/>
 <div class="modal fade" id="editRow">
     <div class="modal-dialog">
+        <form class="form-horizontal" id="detailsForm" >
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title"><spring:message code="users.add"/></h2>
+                <h2 class="modal-title" id="modalTitle"></h2>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" method="post" id="detailsForm">
-                    <input type="text" hidden="hidden" id="id" name="id">
+                    <input type="hidden" id="id" name="id">
 
-                    <div class="form-group">
+                    <div class="form-group" id="group1">
                         <label for="name" class="control-label col-xs-3"><spring:message code="users.name"/></label>
 
                         <div class="col-xs-9">
@@ -76,7 +60,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="group2">
                         <label for="email" class="control-label col-xs-3"><spring:message code="users.email"/></label>
 
                         <div class="col-xs-9">
@@ -84,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="group3">
                         <label for="password" class="control-label col-xs-3"><spring:message code="users.password"/></label>
 
                         <div class="col-xs-9">
@@ -92,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="group4">
                         <label for="role1" class="control-label col-xs-3"><spring:message code="users.roles.user"/></label>
 
                         <div class="col-xs-9">
@@ -113,18 +97,17 @@
                             <input type="hidden" id="roles" name="roles"/>
                         </div>
                     </div>
+            </div>
 
-                    <div class="form-group">
-                        <div class="col-xs-offset-3 col-xs-9">
-                            <button type="submit" class="btn btn-primary">
-                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <div class="modal-footer" id="group5">
+                <button type="submit" class="btn btn-success"><spring:message code="common.save"/></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="select.close"/></button>
             </div>
         </div>
+        </form>
     </div>
 </div>
+
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

@@ -37,9 +37,9 @@ public abstract class AbstractCreditApplicationListProductController {
         return service.save(creditApplicationListProduct);
     }
 
-    public void delete(int id){
-        LOG.info("delete CreditApplicationListProduct {}", id);
-        service.delete(id);
+    public void deleteAllCRAPPROD(int idcred){
+        LOG.info("delete CreditApplicationListProduct {}", idcred);
+        service.delete(idcred);
     }
 
 }

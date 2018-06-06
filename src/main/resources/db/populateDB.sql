@@ -6,35 +6,38 @@ DELETE FROM users;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
-VALUES ('User', 'user@yandex.ru', 'password');
+VALUES ('User', 'user@yandex.ru', '{noop}password');
 
 INSERT INTO users (name, email, password)
-VALUES ('User1', 'user1@yandex1.ru', 'password1');
+VALUES ('User1', 'user1@yandex1.ru', '{noop}password1');
 
 INSERT INTO users (name, email, password)
-VALUES ('Admin', 'admin@gmail.com', 'admin');
+VALUES ('Admin', 'admin@gmail.com', '{noop}admin');
 
 INSERT INTO users (name, email, password)
-VALUES ('Partner1', 'partner@yandex.ru', 'partner1');
+VALUES ('Partner1', 'partner@yandex.ru', '{noop}partner1');
 
 INSERT INTO users (name, email, password)
-VALUES ('Partner2', 'partner1@yandex.ru', 'partner2');
+VALUES ('Partner2', 'partner1@yandex.ru', '{noop}partner2');
 
 INSERT INTO users (name, email, password)
-VALUES ('Partner3', 'partner2@yandex.ru', 'partner3');
+VALUES ('Partner3', 'partner2@yandex.ru', '{noop}partner3');
 
 INSERT INTO users (name, email, password)
-VALUES ('Representative', 'representative@gmail.com', 'representative');
+VALUES ('Representative', 'representative@gmail.com', '{noop}representative');
+
+INSERT INTO users (name, email, password)
+VALUES ('Superuser', 'superuser@gmail.com', '{noop}superuser');
 
 INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 100000),
   ('ROLE_USER', 100001),
-  ('ROLE_USER', 100002),
   ('ROLE_ADMIN', 100002),
   ('ROLE_PARTNER', 100003),
   ('ROLE_PARTNER', 100004),
   ('ROLE_PARTNER', 100005),
-  ('ROLE_REPRESENTATIVE', 100006);
+  ('ROLE_REPRESENTATIVE', 100006),
+  ('ROLE_SUPERUSER', 100007);
 
 insert into products (name, price, description, partnerid) values
 ('ferrari1', 10000000, 'cars', 100004),
@@ -52,6 +55,7 @@ date_time_create, phone_number, an_initial_fee, status_of_application_parner, st
 (100001,'Вася1 Громов1','2000-06-01', '2010-01-11 15:04:00', '89112312326', 10012, null , null);
 
 insert into credit_application_list_product(cred_app_id, productl_id) values
-(100014, 100007),
-(100014, 100008),
-(100015, 100011);
+(100015, 100008),
+(100015, 100009),
+(100016, 100012),
+(100017, 100011);

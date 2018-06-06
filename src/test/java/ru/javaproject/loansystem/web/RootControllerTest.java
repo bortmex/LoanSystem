@@ -48,6 +48,7 @@ public class RootControllerTest extends AbstractControllerTest {
                 )));
     }
 
+/*
     @Test
     public void testGetStartPageForPartner() throws Exception {
         mockMvc.perform(get("/showCreditAppListAndProductListForPartner"))
@@ -56,6 +57,7 @@ public class RootControllerTest extends AbstractControllerTest {
                 .andExpect(view().name("showCreditAppListAndProductListForPartner"))
                 .andExpect(forwardedUrl("/WEB-INF/jsp/showCreditAppListAndProductListForPartner.jsp"));
     }
+*/
 
     @Test
     public void testGetPartnerForRep() throws Exception {

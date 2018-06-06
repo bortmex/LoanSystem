@@ -10,8 +10,10 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = Product.ALL_WITH_USERID, query = "SELECT p FROM Product p where p.user.id = ?1 ORDER BY p.id"),
         @NamedQuery(name = Product.ALL, query = "SELECT p FROM Product p ORDER BY p.id"),
-        @NamedQuery(name = Product.UPDATE, query = "UPDATE Product p SET p.price=:price, p.description=:description WHERE p.id=:id and p.user.id=?1"),
-        @NamedQuery(name = Product.DELETE, query = "DELETE FROM Product p WHERE p.id=:id and p.user.id=?1")
+        @NamedQuery(name = Product.UPDATEWITHUSERID, query = "UPDATE Product p SET p.price=:price, p.description=:description WHERE p.id=:id and p.user.id=?1"),
+        @NamedQuery(name = Product.UPDATE, query = "UPDATE Product p SET p.name=:name, p.price=:price, p.description=:description WHERE p.id=:id"),
+        @NamedQuery(name = Product.DELETEWITHUSERID, query = "DELETE FROM Product p WHERE p.id=:id and p.user.id=?1"),
+        @NamedQuery(name = Product.DELETE, query = "DELETE FROM Product p WHERE p.id=:id")
 })
 
 @Entity
@@ -19,7 +21,9 @@ import java.util.Set;
 @Access(AccessType.FIELD)
 public class Product extends NamedEntity{
 
+    public static final String UPDATEWITHUSERID = "Product.select.withuserid";
     public static final String UPDATE = "Product.select";
+    public static final String DELETEWITHUSERID = "Product.delete.withuser.id";
     public static final String DELETE = "Product.delete";
     public static final String ALL_WITH_USERID = "Product.getAllWithUserID";
     public static final String ALL = "Product.getAll";
@@ -47,16 +51,15 @@ public class Product extends NamedEntity{
     }
 
     @Range(min = 10, max = 10000000)
-    private int price;
+    private Integer price;
 
     @NotBlank
     private String description;
 
     @ManyToMany(mappedBy = "productList")
-    /*@JoinColumn(name="product_id", insertable=false, updatable=false)*/
     private Set<CreditApplication> creditApplicationSet;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="partnerid", nullable = false)
     private User user;
 
@@ -68,7 +71,7 @@ public class Product extends NamedEntity{
         this.user = user;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -80,7 +83,7 @@ public class Product extends NamedEntity{
         this.creditApplicationSet = creditApplicationSet;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

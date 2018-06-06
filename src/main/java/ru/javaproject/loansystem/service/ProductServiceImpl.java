@@ -29,8 +29,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product get(int id) throws NotFoundException {
+        return repository.get(id);
+    }
+
+    @Override
     public void delete(int id, int userId) throws NotFoundException {
         checkNotFoundWithId(repository.delete(id, userId), id);
+    }
+
+    @Override
+    public void delete(int id) throws NotFoundException {
+        repository.delete(id);
     }
 
     @Override
@@ -47,6 +57,12 @@ public class ProductServiceImpl implements ProductService {
     public Product update(Product product, int userId) throws NotFoundException {
         Assert.notNull(product,"product must not be null");
         return checkNotFoundWithId(repository.save(product,userId), product.getId());
+    }
+
+    @Override
+    public Product update(Product product) throws NotFoundException {
+        Assert.notNull(product,"product must not be null");
+        return repository.save(product);
     }
 
 }

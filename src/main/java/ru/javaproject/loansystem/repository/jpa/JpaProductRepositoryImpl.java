@@ -26,10 +26,19 @@ public class JpaProductRepositoryImpl implements ProductRepository{
             em.persist(product);
             return product;
         }else {
-            return em.createNamedQuery(Product.UPDATE).setParameter("id", product.getId()).setParameter("price", product.getPrice())
+            return em.createNamedQuery(Product.UPDATEWITHUSERID).setParameter("id", product.getId()).setParameter("price", product.getPrice())
                                                       .setParameter("description", product.getDescription())
                                                       .setParameter(1, partnerId).executeUpdate() != 0 ? em.merge(product) : null;
         }
+    }
+
+    @Override
+    @Transactional
+    public Product save(Product product) {
+            return em.createNamedQuery(Product.UPDATE).setParameter("id", product.getId()).setParameter("name", product.getName())
+                                                      .setParameter("price", product.getPrice())
+                                                      .setParameter("description", product.getDescription())
+                                                      .executeUpdate() != 0 ? em.merge(product) : null;
     }
 
     @Override
@@ -39,9 +48,20 @@ public class JpaProductRepositoryImpl implements ProductRepository{
     }
 
     @Override
+    @Transactional
+    public boolean delete(int id) {
+        return em.createNamedQuery(Product.DELETE).setParameter("id", id).executeUpdate() != 0;
+    }
+
+    @Override
     public Product get(int id, int userId) {
         Product product = em.find(Product.class, id);
         return product.getUser().getId()==userId ? product : null;
+    }
+
+    @Override
+    public Product get(int id) {
+        return em.find(Product.class, id);
     }
 
     @Override

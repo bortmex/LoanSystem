@@ -1,14 +1,20 @@
 package ru.javaproject.loansystem.model;
 
-import org.hibernate.annotations.BatchSize;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.CollectionUtils;
+import ru.javaproject.loansystem.View;
 
 import javax.persistence.*;
+import javax.persistence.AccessType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.util.*;
 
 @SuppressWarnings("JpaQlInspection")
@@ -35,7 +41,11 @@ public class User extends NamedEntity{
     @Column(name = "password", nullable = false)
     @NotBlank
     @Length(min = 5)
+    @JsonView(View.REST.class)
     private String password;
+
+    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
+    private boolean enabled = true;
 
     @Column(name = "registered", columnDefinition = "timestamp default now()")
     private Date registered = new Date();
@@ -45,9 +55,8 @@ public class User extends NamedEntity{
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.LAZY)
-//    @Fetch(FetchMode.SUBSELECT)
+    @Fetch(FetchMode.JOIN)
     @BatchSize(size = 200)
-    //@JsonIgnore
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -57,21 +66,19 @@ public class User extends NamedEntity{
     }
 
     public User(User u) {
-        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getRoles());
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRoles());
     }
 
-    public User(String name, String email, String password, Role role, Role... roles) {
-        this(null, name, email, password, EnumSet.of(role, roles));
-    }
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, EnumSet.of(role, roles));
+        this(id, name, email, password, true, EnumSet.of(role, roles));
     }
 
-    public User(Integer id, String name, String email, String password, Set<Role> roles) {
+    public User(Integer id, String name, String email, String password, boolean enabled, Set<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.enabled = enabled;
+        setRoles(roles);
     }
 
     public String getEmail() {
@@ -92,6 +99,14 @@ public class User extends NamedEntity{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getRegistered() {
@@ -116,11 +131,13 @@ public class User extends NamedEntity{
 
     @Override
     public String toString() {
-        return "User (" +
-                "id=" + id +
-                ", email=" + email +
-                ", name=" + name +
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", registered=" + registered +
                 ", roles=" + roles +
-                ')';
+                ", products=" + products +
+                '}';
     }
 }

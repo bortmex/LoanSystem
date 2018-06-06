@@ -13,6 +13,8 @@ public interface CreditApplicationRepository {
 
     boolean delete(int id, int userId);
 
+    boolean delete(int id);
+
     CreditApplication get(int id, int userId);
 
     CreditApplication get(int id);

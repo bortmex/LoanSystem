@@ -3,8 +3,10 @@ package ru.javaproject.loansystem.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.javaproject.loansystem.AuthorizedUser;
 import ru.javaproject.loansystem.model.User;
 import ru.javaproject.loansystem.service.UserService;
+import ru.javaproject.loansystem.to.UserTo;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     public List<User> getAll() {
         log.info("getAll");
@@ -33,6 +35,13 @@ public abstract class AbstractUserController {
         return service.save(user);
     }
 
+    public void update(UserTo userTo) {
+        log.info("update " + userTo);
+        checkIdConsistent(userTo, AuthorizedUser.id());
+        service.update(userTo);
+    }
+
+
     public void delete(int id) {
         log.info("delete " + id);
         service.delete(id);
@@ -44,8 +53,19 @@ public abstract class AbstractUserController {
         service.update(user);
     }
 
+    public void update(UserTo userTo, int id) {
+        log.info("update " + userTo);
+        checkIdConsistent(userTo, id);
+        service.update(userTo);
+    }
+
     public User getByMail(String email) {
         log.info("getByEmail " + email);
         return service.getByEmail(email);
+    }
+
+    public void enable(int id, boolean enabled) {
+        log.info((enabled ? "enable " : "disable ") + id);
+        service.enable(id, enabled);
     }
 }

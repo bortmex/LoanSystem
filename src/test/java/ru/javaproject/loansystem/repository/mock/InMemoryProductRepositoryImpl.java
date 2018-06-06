@@ -35,15 +35,30 @@ public class InMemoryProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public Product save(Product product) {
+        return null;
+    }
+
+    @Override
     public boolean delete(int id, int partnerId) {
         Map<Integer, Product> products = repository.get(partnerId);
         return products != null && products.remove(id) != null;
     }
 
     @Override
+    public boolean delete(int id) {
+        return false;
+    }
+
+    @Override
     public Product get(int id, int partnerId) {
         Map<Integer, Product> products = repository.get(partnerId);
         return products == null ? null : products.get(id);
+    }
+
+    @Override
+    public Product get(int id) {
+        return null;
     }
 
     @Override

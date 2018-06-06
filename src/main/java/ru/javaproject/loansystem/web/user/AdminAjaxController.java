@@ -1,11 +1,17 @@
 package ru.javaproject.loansystem.web.user;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.javaproject.loansystem.View;
 import ru.javaproject.loansystem.model.Role;
 import ru.javaproject.loansystem.model.User;
+import ru.javaproject.loansystem.to.UserTo;
 
+import javax.validation.Valid;
 import java.util.List;
+
+import static ru.javaproject.loansystem.util.UsersUtil.strToRole;
 
 @RestController
 @RequestMapping("/ajax/admin/users")
@@ -13,8 +19,19 @@ public class AdminAjaxController extends AbstractUserController {
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(View.UI.class)
     public List<User> getAll() {
-        return super.getAll();
+        List<User> list =  super.getAll();
+        for (User user: list) {
+            user.setProducts(null);
+        }
+        return list;
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(View.UI.class)
+    public User get(@PathVariable("id") int id) {
+        return super.get(id);
     }
 
     @Override
@@ -24,21 +41,19 @@ public class AdminAjaxController extends AbstractUserController {
     }
 
     @PostMapping
-    public void createOrUpdate(@RequestParam("id") Integer id,
-                               @RequestParam("name") String name,
-                               @RequestParam("email") String email,
-                               @RequestParam("password") String password,
-                               @RequestParam("roles") String roles) {
+    public void createOrUpdate(@Valid UserTo userTo) {
 
-
-        Role role = Role.ROLE_USER;
-        if(roles.equals(Role.ROLE_PARTNER.toString())) role = Role.ROLE_PARTNER;
-        else if(roles.equals(Role.ROLE_REPRESENTATIVE.toString())) role = Role.ROLE_REPRESENTATIVE;
-        User user = new User(id, name, email, password, role);
+        Role role = strToRole(userTo.getRoles());
+        User user = new User(userTo.getId(), userTo.getName(), userTo.getEmail(), userTo.getPassword(), role);
         if (user.isNew()) {
             super.create(user);
         } else {
-            super.update(user, id);
+            super.update(userTo, userTo.getId());
         }
+    }
+
+    @PostMapping(value = "/{id}")
+    public void enabled(@PathVariable("id") int id, @RequestParam("enabled") boolean enabled) {
+        super.enable(id, enabled);
     }
 }

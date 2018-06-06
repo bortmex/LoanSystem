@@ -33,6 +33,11 @@ public class CreditApplicationServiceImpl implements CreditApplicationService {
     }
 
     @Override
+    public void delete(int id) throws NotFoundException {
+        repository.delete(id);
+    }
+
+    @Override
     public Collection<CreditApplication> getAllForUsersId(int userId) {
         return repository.getAllForUsersId(userId);
     }
@@ -46,6 +51,11 @@ public class CreditApplicationServiceImpl implements CreditApplicationService {
     public CreditApplication update(CreditApplication creditApplication, int userId) throws NotFoundException {
         Assert.notNull(creditApplication,"product must not be null");
         return checkNotFoundWithId(repository.save(creditApplication,userId), creditApplication.getId());
+    }
+
+    @Override
+    public CreditApplication update(CreditApplication creditApplication) throws NotFoundException {
+        return repository.save(creditApplication);
     }
 
     @Override

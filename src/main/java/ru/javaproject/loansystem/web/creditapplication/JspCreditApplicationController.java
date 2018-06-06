@@ -34,13 +34,7 @@ public class JspCreditApplicationController extends AbstractCreditApplicationCon
         return "mycreditapp";
     }
 
-    @GetMapping("/showCreditAppListForPartner")
-    public String getAllCreditAppForPartner(Model model){
-        model.addAttribute("creditapplication", PartnerUtil.getListsOfApplicationsForOnePartner((List<CreditApplication>) getAll(), AuthorizedUser.id()));
-        return "showCreditAppListForPartner";
-    }
-
-    @RequestMapping("/see/create/{id}")
+    @RequestMapping("/createcredapp/{id}")
     public String partnersAndCA(@PathVariable int id, Model model) {
         CreditApplication creditApplication = new CreditApplication("", null, LocalDateTime.now(), "", null);
         model.addAttribute("creditApplication", creditApplication);
@@ -49,12 +43,6 @@ public class JspCreditApplicationController extends AbstractCreditApplicationCon
         model.addAttribute("productsTrue", creditApplication.getProduct());
         model.addAttribute("partnerId", listProd.iterator().next().getUser().getId());
         return "createcreditapplication";
-    }
-
-    @GetMapping("/showcreditapplistforrepresentative")
-    public String getPartnersAndCAForRepresent(Model model) {
-        model.addAttribute("creditapplications", PartnerUtil.getListsOfApplicationsForRepr((List<CreditApplication>) getAll()));
-        return "showCreditAppListForRepresentative";
     }
 
     @PostMapping("/creditApplication/add")

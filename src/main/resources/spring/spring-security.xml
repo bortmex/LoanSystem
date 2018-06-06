@@ -10,21 +10,63 @@
     <http pattern="/resources/**" security="none"/>
     <http pattern="/webjars/**" security="none"/>
 
+
     <http pattern="/rest/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
         <http-basic/>
         <intercept-url pattern="/rest/admin/**" access="hasRole('ROLE_ADMIN')"/>
-       <!-- <intercept-url pattern="/rest/profile/partner/**" access="hasRole('ROLE_PARTNER')"/>
-        <intercept-url pattern="/rest/profile/resentative/**" access="hasRole('ROLE_REPRESENTATIVE')"/>-->
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <csrf disabled="true"/>
     </http>
 
+    <http>
+        <intercept-url pattern="/login" access="isAnonymous()"/>
+        <intercept-url pattern="/register" access="isAnonymous()"/>
+
+        <intercept-url pattern="/users" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/createredproduct" access="hasRole('ROLE_PARTNER')"/>
+        <intercept-url pattern="/showproductlistforpartner" access="hasRole('ROLE_PARTNER')"/>
+        <intercept-url pattern="/showCreditAppListForPartner" access="hasRole('ROLE_PARTNER')"/>
+        <intercept-url pattern="/**/partner/**" access="hasRole('ROLE_PARTNER')"/>
+        <intercept-url pattern="/showAllPartnerForRepresentative" access="hasRole('ROLE_REPRESENTATIVE')"/>
+        <intercept-url pattern="/showcreditapplistforrepresentative" access="hasRole('ROLE_REPRESENTATIVE')"/>
+        <intercept-url pattern="/**/repres/**" access="hasRole('ROLE_REPRESENTATIVE')"/>
+        <intercept-url pattern="/superEditCredApp" access="hasRole('ROLE_SUPERUSER')"/>
+        <intercept-url pattern="/**/superuser/**" access="hasRole('ROLE_SUPERUSER')"/>
+        <intercept-url pattern="/**/user/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/partnerlists" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/see/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/createcredapp/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/mycreditapplication**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/creditApplication**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/**" access="isAuthenticated()"/>
+
+        <form-login login-page="/login"
+                    authentication-success-handler-ref="authSuccessHandler"
+                    authentication-failure-url="/login?error=true"
+                    login-processing-url="/spring_security_check"/>
+        <logout logout-success-url="/login"/>
+        <!--<csrf disabled="true"/>-->
+    </http>
+
+    <beans:bean id="authSuccessHandler" class="ru.javaproject.loansystem.web.savedrequestawareauthenticationsuccesshandler.AuthSuccessHandler" />
+
+    <beans:bean class="org.springframework.security.crypto.factory.PasswordEncoderFactories" id="passwordEncoder" factory-method="createDelegatingPasswordEncoder"/>
+
+
     <authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="user@yandex.ru" password="password" authorities="ROLE_USER"/>
-                <user name="admin@gmail.com" password="admin" authorities="ROLE_ADMIN"/>
-            </user-service>
+        <authentication-provider user-service-ref="userService">
+            <password-encoder ref="passwordEncoder"/>
+                                    <!--<jdbc-user-service data-source-ref="dataSource"
+                                                       users-by-username-query="SELECT email, password, enabled FROM users WHERE email = ?"
+                                                       authorities-by-username-query="
+                                                                               SELECT u.email, r.role FROM users u, user_roles r WHERE u.id = r.user_id AND u.email = ?"
+                                    />-->
+                                               <!--<user-service>
+                                                   <user name="user@yandex.ru" password="password" authorities="ROLE_USER"/>
+                                                   <user name="admin@gmail.com" password="admin" authorities="ROLE_ADMIN"/>
+                                               </user-service>-->
+
         </authentication-provider>
     </authentication-manager>
 </beans:beans>

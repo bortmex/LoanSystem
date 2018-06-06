@@ -28,28 +28,29 @@
 
 </style>
 <script>
+    $(function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+
     function get(id, partnerid) {
         $.get('ajax/user/product/' + id + "/" + partnerid, function (data) {
-            /*$('#detailsFormProduct').find("p[name='productGetId']").val(data.description);*/
             $(".productGetId").html(data.description);
             $('#editRowProduct').modal();
         });
     }
 </script>
-<%--<head>
-    <title><spring:message code="product.title"/></title>
-</head>--%>
 
 <body>
-<jsp:include page="fragments/bodyHeaderUser.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div id="wrap">
     <header>
         <span class="list-style-buttons">
-        <%--<a id="gridview" class="switcher" href="<c:url value='/see/create/${partnerId}'/>"><img src="<spring:message code="apply.online"/>" alt=<spring:message code="credapps.create"/>></a>--%>
-        <a id="gridview" class="switcher" href="<c:url value='/see/create/${partnerId}'/>"><input type="submit"
-                                                                                                  class="btn btn-primary black-background"
-                                                                                                  value="<spring:message code="credapps.create"/>"/></a>
+        <a id="gridview" class="btn btn-primary black-background"  href="<c:url value='/createcredapp/${partnerId}'/>"><spring:message code="credapps.create"/></a>
         </span>
         <h1><spring:message code="users.products"/> ${partnerName}</h1>
     </header>

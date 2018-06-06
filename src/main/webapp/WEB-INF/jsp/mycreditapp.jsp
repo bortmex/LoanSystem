@@ -15,7 +15,7 @@
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
 <script type="text/javascript" src="resources/js/userUserDatatables.js" defer></script>
-<jsp:include page="fragments/bodyHeaderUser.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <c:if test="${pageContext.request.queryString=='_addCredApp'}">
     <script type="text/javascript" src="resources/js/successAddProductOrCredApp.js" defer></script>
 </c:if>
@@ -87,10 +87,4 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
-<script type="text/javascript">
-    var i18n = [];
-    <c:forEach var='key' items='<%=new String[]{"common.saved","common.failed"}%>'>
-    i18n['${key}'] = '<spring:message code="${key}"/>';
-    </c:forEach>
-</script>
 </html>

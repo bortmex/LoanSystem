@@ -12,11 +12,15 @@ public interface CreditApplicationService {
 
     void delete(int id, int userId) throws NotFoundException;
 
+    void delete(int id) throws NotFoundException;
+
     Collection<CreditApplication> getAllForUsersId(int userId);
 
     Collection<CreditApplication> getAll();
 
     CreditApplication update(CreditApplication creditApplication, int userId) throws NotFoundException;
+
+    CreditApplication update(CreditApplication creditApplication) throws NotFoundException;
 
     CreditApplication save(CreditApplication creditApplication, int userId);
 

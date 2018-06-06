@@ -14,7 +14,7 @@
 </head>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
-<jsp:include page="fragments/bodyHeaderUser.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 
 <section class="jumbotron text-center">
         <h1 class="jumbotron-heading"><h3><spring:message code="select.partner"/></h3></h1>
@@ -23,10 +23,18 @@
         <jsp:useBean id="partners" scope="page" type="ru.javaproject.loansystem.model.User"/>
         <li><a href="<c:url value='/see/${partners.id}'/>" class="list-group-item">${partners.name}</a></li>
     </c:forEach>
-</div>
+    </div>
 </section>
-
 
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<script>
+    $(function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+</script>
 </html>

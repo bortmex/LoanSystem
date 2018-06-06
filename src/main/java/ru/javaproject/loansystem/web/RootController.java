@@ -1,64 +1,63 @@
 package ru.javaproject.loansystem.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import ru.javaproject.loansystem.AuthorizedUser;
-import ru.javaproject.loansystem.model.User;
 import ru.javaproject.loansystem.service.UserService;
+import ru.javaproject.loansystem.to.UserTo;
 import ru.javaproject.loansystem.util.PartnerUtil;
 import ru.javaproject.loansystem.util.UsersUtil;
+import ru.javaproject.loansystem.web.user.AbstractUserController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
-/**
- * User: gkislin
- * Date: 22.08.2014
- */
 @Controller
-public class RootController {
+public class RootController extends AbstractUserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/")
+    @GetMapping("/")
     public String root() {
-        return "index";
+        return "redirect:profile";
     }
 
-    @PostMapping("/authorization")
-    public String takeUser(HttpServletRequest req) {
-        int userId = Integer.valueOf(req.getParameter("userId"));
-        AuthorizedUser.setId(userId);
-        User userAuthorized = userService.get(AuthorizedUser.id());
-        if (UsersUtil.isAdmin(userAuthorized)) {
-            return "redirect:/users";
-        }
-        if (UsersUtil.isPartner(userAuthorized)) {
-            return "redirect:/showCreditAppListAndProductListForPartner";
-        } else if(UsersUtil.isRepresentative(userAuthorized)){
-            return "redirect:/showcreditapplistforrepresentative";
-        }else
-            return "redirect:/partnerlist";
+    @GetMapping(value = "/login")
+    public String login() {
+        return "login";
     }
 
-/*    @GetMapping("/partner/create")
-    public String createPartner(Model model) {
-        model.addAttribute("user",new User("","","", Role.ROLE_PARTNER));
-        return "createPartner";
+    @GetMapping("/createredproduct")
+    public String productCreate(){
+        return "createProduct";
     }
 
-    @PostMapping("/partner/add")
-    public String addPartner(HttpServletRequest req) {
-        userService.save(new User(req.getParameter("name"),req.getParameter("email"),req.getParameter("password"), Role.ROLE_PARTNER));
-        return "redirect:/showAllPartnerForRepresentative";
-    }*/
+    @GetMapping("/showproductlistforpartner")
+    public String getAllProductForPartner(){
+        return "showProductListForPartner";
+    }
 
+    @GetMapping("/showcreditapplistforrepresentative")
+    public String getPartnersAndCAForRepresent() {
+        return "showCreditAppListForRepresentative";
+    }
+
+    @GetMapping("/showCreditAppListForPartner")
+    public String getAllCreditAppForPartner(){
+        return "showCreditAppListForPartner";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
-    public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAll());
+    public String getAllUsers() {
         return "allusers";
     }
 
@@ -68,15 +67,63 @@ public class RootController {
         return "showAndCreatePartnerForRepresentative";
     }
 
-    @GetMapping("/showCreditAppListAndProductListForPartner")
-    public String getStartPageForPartner() {
-        return "showCreditAppListAndProductListForPartner";
+    @GetMapping("/superEditCredApp")
+    public String getEditPageCredAppForSuperuser() {
+        return "superEditCredApp";
     }
 
-    @GetMapping("/partnerlist")
+    @GetMapping("/superEditProduct")
+    public String getEditPageProductsForSuperuser() {
+        return "superEditProduct";
+    }
+
+    @GetMapping("/partnerlists")
     public String partnersAndCAForuser(Model model) {
         model.addAttribute("partners", PartnerUtil.getAllPartner(userService.getAll()));
         return "partnerlist";
+    }
+
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
+    @PostMapping("/profile")
+    public String updateProfile(@Valid UserTo userTo, BindingResult result, SessionStatus status) {
+        if (!result.hasErrors()) {
+            try {
+                super.update(userTo, AuthorizedUser.id());
+                AuthorizedUser.get().update(userTo);
+                status.setComplete();
+                return "redirect:profile";
+            } catch (DataIntegrityViolationException ex) {
+                result.rejectValue("email", "users.email.duplicate");
+            }
+        }
+        return "profile";
+    }
+
+    @GetMapping("/register")
+    public String register(ModelMap model) {
+        model.addAttribute("userTo", new UserTo());
+        model.addAttribute("register", true);
+        return "profile";
+    }
+
+
+    @PostMapping("/register")
+    public String saveRegister(@Valid UserTo userTo, BindingResult result, SessionStatus status, ModelMap model) {
+        if (!result.hasErrors()) {
+            try {
+                super.create(UsersUtil.createNewFromTo(userTo));
+                status.setComplete();
+                return "redirect:login?message=app.registered";
+            } catch (DataIntegrityViolationException ex) {
+                result.rejectValue("email", "users.email.duplicate");
+            }
+        }
+        model.addAttribute("register", true);
+        return "profile";
     }
 
 }

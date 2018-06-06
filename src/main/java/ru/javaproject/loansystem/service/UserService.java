@@ -2,6 +2,7 @@ package ru.javaproject.loansystem.service;
 
 
 import ru.javaproject.loansystem.model.User;
+import ru.javaproject.loansystem.to.UserTo;
 import ru.javaproject.loansystem.util.exception.NotFoundException;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public interface UserService {
     List<User> getAll();
 
     void update(User user);
+
+    void update(UserTo user);
+
+    void enable(int id, boolean enable);
 
     void evictCache();
 }

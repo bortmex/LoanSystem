@@ -65,6 +65,11 @@ public class InMemoryCreditApplicationRepositoryImpl implements CreditApplicatio
     }
 
     @Override
+    public boolean delete(int id) {
+        return false;
+    }
+
+    @Override
     public CreditApplication get(int id, int userId) {
         Map<Integer, CreditApplication> products = repository.get(userId);
         return products == null ? null : products.get(id);

@@ -35,16 +35,6 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <!-- Spring Security -->
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
 
     <filter>
         <filter-name>encodingFilter</filter-name>
@@ -63,34 +53,14 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-<!--    <servlet>
-        <servlet-name>servletForRepresentative</servlet-name>
-        <servlet-class>ru.javaproject.loansystem.web.arealizationonlywithservletononlywithservlet.ServletForRepresentative</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>servletForRepresentative</servlet-name>
-        <url-pattern>/representativepage</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>servletForUser</servlet-name>
-        <servlet-class>ru.javaproject.loansystem.web.arealizationonlywithservletononlywithservlet.ServletForUser</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>servletForUser</servlet-name>
-        <url-pattern>/products</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>servletForPartner</servlet-name>
-        <servlet-class>ru.javaproject.loansystem.web.arealizationonlywithservletononlywithservlet.ServletForPartner</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>servletForPartner</servlet-name>
-        <url-pattern>/partnerpage</url-pattern>
-    </servlet-mapping>-->
+    <!-- Spring Security -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

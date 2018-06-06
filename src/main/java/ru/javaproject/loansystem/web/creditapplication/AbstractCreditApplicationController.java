@@ -34,10 +34,20 @@ public abstract class AbstractCreditApplicationController extends AbstractCredit
         service.delete(id, userId);
     }
 
+    public void deleteCredApp(int id){
+        LOG.info("delete creditapplication {}", id);
+        service.delete(id);
+    }
+
     public void update(CreditApplication creditApplication, int id) {
         checkIdConsistent(creditApplication, id);
         LOG.info("update creditapplication {} for User {}", creditApplication, AuthorizedUser.id());
         service.update(creditApplication, AuthorizedUser.id());
+    }
+
+    public void update(CreditApplication creditApplication) {
+        LOG.info("update creditapplication {}", creditApplication);
+        service.update(creditApplication);
     }
 
     public CreditApplication get(int id,int userId){

@@ -12,7 +12,7 @@
 <body>
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/reprUserDatatables.js" defer></script>
-<jsp:include page="fragments/bodyHeaderRepres.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="container">
     <div class="table-wrapper">
@@ -31,16 +31,6 @@
                 <th></th>
             </tr>
             </thead>
-            <tbody>
-            <c:forEach items="${creditapplications}" var="creditapplications">
-                <jsp:useBean id="creditapplications" scope="page" type="ru.javaproject.loansystem.model.CreditApplication"/>
-                <tr>
-                    <td><c:out value="${creditapplications.id}"/></td>
-                    <td><c:out value="${creditapplications.fio}"/></td>
-                    <td><button type="button" class="btn btn-info" onclick="get(${creditapplications.id})"><spring:message code="credapps.more"/></button></td>
-                </tr>
-            </c:forEach>
-            </tbody>
         </table>
     </div>
 </div>
@@ -125,44 +115,6 @@
         </div>
     </div>
 </div>
-
-<%--<table>
-    <thead>
-    <tr>
-        <th>questionnaireFio</th>
-        <th>dateBirth</th>
-        <th>dateTimeCreate</th>
-        <th>phoneNumber</th>
-        <th>anInitialFee</th>
-        <th>productList</th>
-        <th>statusOfApplicationParner</th>
-        <th>statusOfApplicationRepresentative</th>
-    </tr>
-    </thead>
-    <c:forEach items="${creditapplications}" var="creditapplications">
-        <jsp:useBean id="creditapplications" scope="page" type="ru.javaproject.loansystem.model.CreditApplication"/>
-        <tr>
-            <td>${creditapplications.fio}</td>
-            <td>${creditapplications.dateBirth}</td>
-            <td>${creditapplications.dateTimeCreate}</td>
-            <td>${creditapplications.phoneNumber}</td>
-            <td>${creditapplications.anInitialFee}</td>
-            <td> <c:forEach items="${creditapplications.product}"  var="productCre">
-                <jsp:useBean id="productCre" scope="page" type="ru.javaproject.loansystem.model.Product"/>
-                ${productCre.name} ${productCre.description}
-            </c:forEach></td>
-            <td>${creditapplications.statusOfApplicationParner}</td>
-            <td>${creditapplications.statusOfApplicationRepresentative}</td>
-        </tr>
-    </c:forEach>
-
-</table>--%>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
-<script type="text/javascript">
-    var i18n = [];
-    <c:forEach var='key' items='<%=new String[]{"credapps.more", "common.enable", "common.dontenable", "common.failed"}%>'>
-    i18n['${key}'] = '<spring:message code="${key}"/>';
-    </c:forEach>
-</script>
 </html>

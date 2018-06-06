@@ -22,7 +22,7 @@ public abstract class AbstractProductController {
 
     public Product get(int id){
         LOG.info("get product {} for Partner {}", id, AuthorizedUser.id());
-        return service.get(id, AuthorizedUser.id());
+        return service.get(id);
     }
 
     public Product get(int id, int partnerId){
@@ -32,7 +32,7 @@ public abstract class AbstractProductController {
 
     public void delete(int id) {
         LOG.info("delete product {} for Partner {}", id, AuthorizedUser.id());
-        service.delete(id, AuthorizedUser.id());
+        service.delete(id);
     }
 
     public Product create(Product product, int idpartner){
@@ -45,6 +45,11 @@ public abstract class AbstractProductController {
         checkIdConsistent(product, id);
         LOG.info("update {} for Partner {}", product, AuthorizedUser.id());
         service.update(product, AuthorizedUser.id());
+    }
+
+    public void update(Product product) {
+        LOG.info("update {}", product);
+        service.update(product);
     }
 
     public Collection<Product> getAll(int partnerId){

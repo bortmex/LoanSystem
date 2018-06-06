@@ -1,3 +1,4 @@
+<%@ page import="ru.javaproject.loansystem.AuthorizedUser" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
@@ -13,6 +14,10 @@
     <title><spring:message code="product.my"/></title>
 </head>
 <jsp:include page="fragments/headTag.jsp"/>
+<script src="resources/js/showProdListForPartn.js" defer></script>
+<%
+    Integer id = AuthorizedUser.get().getId();
+%>
 <script>
     function get(id, partnerid) {
         $.get('ajax/partner/product/' + id + "/" + partnerid, function(data){
@@ -22,34 +27,17 @@
     }
 </script>
 <body>
-<jsp:include page="fragments/bodyHeaderPart.jsp"/>
+<jsp:include page="fragments/bodyHeader.jsp"/>
+<c:if test="${pageContext.request.queryString=='_addProduct'}">
+    <script type="text/javascript" src="resources/js/successAddProductOrCredApp.js" defer></script>
+</c:if>
 
 <div id="wrap">
     <header>
         <h1 style="text-align: center"><spring:message code="partner.product"/></h1>
     </header>
-
-    <ul id="products" class="grid clearfix">
-        <!-- row 1 -->
-        <c:forEach items="${products}" var="products">
-            <jsp:useBean id="products" scope="page" type="ru.javaproject.loansystem.model.Product"/>
-            <li id="detailsLiProduct" class="clearfix">
-                <section class="left">
-                    <img src="resources/images/list-default-thumb.png" alt="default thumb" class="thumb">
-                    <h3>${products.name}</h3>
-                    <span class="meta"><spring:message code="product.id"/> ${products.id}</span>
-                </section>
-
-                <section class="right">
-                    <span class="price">${products.price} <spring:message code="product.currency"/></span>
-                    <span class="darkview">
-					<a onclick="get(${products.id}, ${products.user.id})"><img src="resources/images/read-more-btn.png" alt="Read More..."></a>
-					</span>
-                </section>
-            </li>
-
-        </c:forEach>
-    </ul>
+    <input type='hidden' id=partnerid value="<%=id%>" />
+    <ul id="products" class="grid clearfix"></ul>
 
 </div>
 

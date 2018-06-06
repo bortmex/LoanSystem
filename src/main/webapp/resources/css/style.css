@@ -9,6 +9,28 @@
     margin-right: 34px;
 }
 
+.error, .message {
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.disabled {
+    opacity: 0.3;
+}
+
+.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+}
+
+.message {
+    color: #2f9635;
+    background-color: #c6fbc2;
+    border: 1px solid #9feba6;
+}
+
 /*test*/
 img { border:0; }
 
