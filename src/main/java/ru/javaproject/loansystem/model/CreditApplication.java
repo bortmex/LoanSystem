@@ -1,5 +1,6 @@
 package ru.javaproject.loansystem.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
@@ -79,6 +80,7 @@ public class CreditApplication extends BaseEntity {
             joinColumns = { @JoinColumn(name = "cred_app_id" , nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "productl_id" , nullable = false, updatable = false) }
     )
+    @JsonManagedReference
     private List<Product> productList = new ArrayList<>();
 
     @Column(name = "an_initial_fee")
@@ -92,7 +94,8 @@ public class CreditApplication extends BaseEntity {
     private Boolean statusOfApplicationRepresentative;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="userid")
+    @JoinColumn(name="userid", nullable = false)
+    @JsonManagedReference
     private User user;
 
     public void addProduct(Product product){

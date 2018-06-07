@@ -42,6 +42,11 @@ public class ProductAjaxController  extends AbstractProductController {
         return super.get(id);
     }
 
+    @GetMapping(value = "/superuser/product/all/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getProductForSuperUsers(@PathVariable("id") int id) {
+        return (List<Product>) super.getAll(id);
+    }
+
     @DeleteMapping("/superuser/product/{id}")
     public void deleteProd(@PathVariable("id") int id) {
         delete(id);

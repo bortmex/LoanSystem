@@ -81,7 +81,14 @@ function save() {
             $('#editRow').modal('hide');
             updateTable();
             successNoty('common.saved');
+        },
+        error: function () {
+            if(userid!==undefined){
+                var text = document.getElementById('description').value;
+                document.getElementById('description').value =  text.substring(0, text.length-6);
+            }
         }
+
     });
 }
 

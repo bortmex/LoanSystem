@@ -1,5 +1,7 @@
 package ru.javaproject.loansystem.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
@@ -56,11 +58,14 @@ public class Product extends NamedEntity{
     @NotBlank
     private String description;
 
-    @ManyToMany(mappedBy = "productList")
+    @ManyToMany(mappedBy = "productList", fetch = FetchType.EAGER)
+
+    @JsonBackReference
     private Set<CreditApplication> creditApplicationSet;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="partnerid", nullable = false)
+    @JsonManagedReference
     private User user;
 
     public User getUser() {

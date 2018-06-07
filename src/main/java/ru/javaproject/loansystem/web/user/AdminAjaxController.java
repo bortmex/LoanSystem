@@ -21,11 +21,7 @@ public class AdminAjaxController extends AbstractUserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(View.UI.class)
     public List<User> getAll() {
-        List<User> list =  super.getAll();
-        for (User user: list) {
-            user.setProducts(null);
-        }
-        return list;
+        return super.getAll();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
